@@ -16,7 +16,7 @@ import java.util.*;
 
 @Service
 public class ConfigService {
-    private static final Logger logger = LoggerFactory.getLogger(RfidService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConfigService.class);
 
     @Resource
     private RfidMapper mapper;

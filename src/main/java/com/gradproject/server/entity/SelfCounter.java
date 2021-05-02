@@ -22,4 +22,5 @@ public class SelfCounter {
     private String totalCounts;
 
     private String address;
+
 }

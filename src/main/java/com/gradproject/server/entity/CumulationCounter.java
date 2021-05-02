@@ -9,7 +9,7 @@ public class CumulationCounter {
 
     private String carNum;
 
-    private String counts;
+    private Integer counts;
 
     private String workDay;
 }

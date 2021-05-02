@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.gradproject.server.dao.CumulationCounterMapper;
 import com.gradproject.server.dao.SelfCounterMapper;
 import com.gradproject.server.entity.CumulationCounter;
+import com.gradproject.server.entity.RfidCarNum;
 import com.gradproject.server.entity.SelfCounter;
 import com.gradproject.server.entity.model.ReturnCode;
 import com.gradproject.server.entity.model.SelfResponse;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -36,7 +38,7 @@ public class SelfCounterService {
     private RfidService rfidService;
 
     /**
-     * 自研计数工具插入一条计数数据
+     * 插入一条计数数据
      *
      * @param counter
      * @return
@@ -106,7 +108,7 @@ public class SelfCounterService {
             int counterDegree = Smapper.selectCounts(counter.getRfid(), queryBeginTime, queryEndTime);
             //设置次数
             counter.setSubCounts("" + (counterDegree + 1));
-            Cucounter.setCounts("" + (counterDegree + 1));
+            Cucounter.setCounts(counterDegree + 1);
 
 
             /*
@@ -145,6 +147,48 @@ public class SelfCounterService {
             logger.error("数据库插入申请失败，异常原因为：【{}】", e.getMessage(), e);
         }
         return response.failure("数据库插入异常");
+    }
+
+    /**
+     * 查询矿车工作记录
+     *
+     * @param beginTime,endTime,carNum
+     * @return
+     */
+    public List<SelfCounter> selectRecord(String beginTime,String endTime,String carNum){
+        List<SelfCounter> CounterRecordList;
+        //查询车号为空，则查询时间段内所有记录
+        if (carNum.equals("")){
+            CounterRecordList=Smapper.selectRecordByTime(beginTime, endTime);
+        }
+        //查询车号不为空，则只查询该车在时间段内的工作记录
+        else {
+            CounterRecordList=Smapper.selectRecordByNumAndTime(carNum,beginTime,endTime);
+        }
+        logger.info("查询到的数据有【{}】条", CounterRecordList.size());
+        logger.info("查询的工作记录为：【{}】", CounterRecordList);
+        //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
+        Iterator<SelfCounter> it=CounterRecordList.iterator();
+        while (it.hasNext()){
+            SelfCounter Counter=it.next();
+            String Base64Pic=fileService.getBase64(Counter.getId());
+            Counter.setPicture(Base64Pic);
+        }
+        return  CounterRecordList;
+
+    }
+
+    /**
+     * 根据指定id查询计数数据
+     *
+     * @param id
+     * @return
+     */
+    public String findCounterPicById(Integer id) {
+        if (id == null || id == 0) {
+            return null;
+        }
+        return Smapper.selectPicById(id);
     }
 
 }
