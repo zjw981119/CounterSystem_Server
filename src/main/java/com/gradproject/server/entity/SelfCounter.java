@@ -23,4 +23,6 @@ public class SelfCounter {
 
     private String address;
 
+    private String carLoad;
+
 }

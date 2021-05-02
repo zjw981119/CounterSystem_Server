@@ -9,6 +9,7 @@ import com.gradproject.server.entity.SelfCounter;
 import com.gradproject.server.entity.model.ReturnCode;
 import com.gradproject.server.entity.model.SelfResponse;
 import com.gradproject.server.utils.DateUtils;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -111,12 +113,11 @@ public class SelfCounterService {
             Cucounter.setCounts(counterDegree + 1);
 
 
-            /*
-            空满载默认值 -1
-            if (counter.getIsFull() == 0) {
-                counter.setIsFull(-1);
+
+            //空满载默认值 空载
+            if (counter.getCarLoad() == null) {
+                counter.setCarLoad("空载");
             }
-             */
 
             //向self_counter数据表中插入数据
             logger.info("插入self_counter数据库中的数据为：【{}】", JSON.toJSONString(counter));
@@ -147,6 +148,31 @@ public class SelfCounterService {
             logger.error("数据库插入申请失败，异常原因为：【{}】", e.getMessage(), e);
         }
         return response.failure("数据库插入异常");
+    }
+
+    /**
+     * 根据id修改车载情况
+     *
+     * @param IdList,carLoad
+     * @return
+     */
+    public SelfResponse setCarLoadByIdList(Integer[] IdList,String carLoad){
+        logger.info("Id列表为：【{}】", Arrays.toString(IdList));
+        SelfResponse response = new SelfResponse();
+        //必传参数不可为空
+        if (IdList.length==0) {
+            return response.failure(ReturnCode.DATA_MISS.getMsg());
+        }
+        int result=0;
+        //遍历数组，修改车载情况
+        for(int i=0;i<IdList.length;i++){
+            result=Smapper.updateCarloadDataById(carLoad,IdList[i]);
+            if (result <= 0) {
+                logger.info("车载情况修改失败");
+                return response.failure("数据库修改异常");
+            }
+        }
+        return response.success();
     }
 
     /**

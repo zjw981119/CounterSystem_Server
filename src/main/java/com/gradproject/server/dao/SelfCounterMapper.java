@@ -1,5 +1,6 @@
 package com.gradproject.server.dao;
 
+import com.gradproject.server.entity.RfidCarNum;
 import com.gradproject.server.entity.SelfCounter;
 import org.apache.ibatis.annotations.*;
 
@@ -32,4 +33,8 @@ public interface SelfCounterMapper {
 
     @Select("select picture from self_counter where id = #{id}")
     String selectPicById(@Param("id") Integer id);
+
+    //修改车载情况
+    @Update("update self_counter set car_load = #{carLoad} where id = #{id}")
+    int updateCarloadDataById(@Param("carLoad") String carLoad,@Param("id") Integer id);
 }
