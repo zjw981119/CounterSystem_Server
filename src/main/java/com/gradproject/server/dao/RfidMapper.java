@@ -19,27 +19,44 @@ public interface RfidMapper {
             @Result(property="carNum", column="car_num"),
             @Result(property="address", column="address")
     })
-    @Select("select * from rfid_carnum where rfid = #{rfid} order by id DESC")
+    @Select("select * from gn_rfid_carnum where rfid = #{rfid} order by id DESC")
     List<RfidCarNum> selectCarByRfid(@Param("rfid") String rfid);
 
     //@Results注解设置id，然后使用@ResultMap注解来复用这段代码。
-    @Select("select * from rfid_carnum where address = #{address} order by id DESC")
+    @Select("select * from gn_rfid_carnum where address = #{address} order by id DESC")
     @ResultMap(value ={"RfidResult"})
     List<RfidCarNum> selectRfidByAddress(@Param("address") String address);
 
-    @Select("select * from rfid_carnum where address = #{address} and rfid = #{rfid} order by id DESC")
+    //动态sql语句，根据address和rfid是否为空来修改SQL
+    @Select({"<script>",
+    "select rfid, car_num, address from gn_rfid_carnum",
+      "<where>",
+        "<if test=\"address != null and address != ''\">address = #{address} </if>",
+        "<if test=\"rfid != null and rfid != ''\">And rfid = #{rfid} </if>",
+      "</where>",
+    "</script>"})
     @ResultMap(value ={"RfidResult"})
-    List<RfidCarNum> selectConfigByAddressAndRfid(@Param("address") String address,@Param("rfid") String rfid);
+    List<RfidCarNum> selectRfidByAddressOrRfid(@Param("address") String address,@Param("rfid") String rfid);
+
+    //动态sql语句，根据address和rfid是否为空查询数据总数
+    @Select({"<script>",
+            "select count(rfid) from gn_rfid_carnum",
+            "<where>",
+            "<if test=\"address != null and address != ''\">address = #{address} </if>",
+            "<if test=\"rfid != null and rfid != ''\">And rfid = #{rfid} </if>",
+            "</where>",
+            "</script>"})
+    Integer CountConfigByAddressOrRfid(@Param("address") String address,@Param("rfid") String rfid);
 
     //Options注解设置id自增长
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn = "id")
-    @Insert("INSERT INTO rfid_carnum(rfid, car_num, address) " +
+    @Insert("INSERT INTO gn_rfid_carnum(rfid, car_num, address) " +
             "VALUES (#{rfid}, #{carNum}, #{address})")
     int insertConfigData(RfidCarNum record);
 
-    @Update("update rfid_carnum set car_num = #{carNum}, address = #{address} where rfid = #{rfid}")
+    @Update("update gn_rfid_carnum set car_num = #{carNum}, address = #{address} where rfid = #{rfid}")
     int setConfigData(RfidCarNum record);
 
-    @Delete("delete from rfid_carnum where rfid = #{rfid}")
+    @Delete("delete from gn_rfid_carnum where rfid = #{rfid}")
     int deleteConfigData(@Param("rfid") String rfid);
 }

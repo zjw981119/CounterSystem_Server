@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/show")
+@RequestMapping("/Rfidshow")
 public class ConfigController {
 
     private static final Logger logger = LoggerFactory.getLogger(SelfCounterController.class);
@@ -23,15 +23,20 @@ public class ConfigController {
 
     //@RequestParam("address")
     @GetMapping("/initConfig")
-    public SelfResponse getList(@RequestParam(required = true,name="address") String address,
-                                @RequestParam(required = false,value = "query") String query){
+    public SelfResponse getList(@RequestParam(required = true,value="address") String address,
+                                @RequestParam(required = false,value = "query") String query,
+                                @RequestParam(required = false,value = "pagenum") Integer pagenum,
+                                @RequestParam(required = false,value = "pagesize") Integer pagesize){
         SelfResponse response = new SelfResponse();
         try {
-            logger.info("获取矿区：【{}】的配置信息。", address);
-            logger.info("查询的rfid号为：【{}】。", query);
-            List<RfidCarNum> cache = configService.getConfigList(address,query);
+            logger.info("获取矿区：【{}】的配置信息。查询的rfid号为：【{}】。", address,query);
+            logger.info("当前选中页数为：【{}】。页面数据容量为：【{}】。", pagenum,pagesize);
+            List<RfidCarNum> cache = configService.getConfigList(address,query,pagenum,pagesize);
+            int total= configService.getCountConfig(address, query);
             logger.info("返回的配置信息为：【{}】", cache);
-            return response.success(cache);
+            logger.info("配置表数据总数为：【{}】条。",total);
+            //logger.info("响应为：【{}】。", response.success(cache,total));
+            return response.success(cache,total);
         } catch (Exception e){
             logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
         }

@@ -12,4 +12,5 @@ public class RfidCarNum {
     private String carNum;
 
     private String address;
+
 }

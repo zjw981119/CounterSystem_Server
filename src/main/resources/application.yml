@@ -7,9 +7,14 @@ spring:
   datasource:
     druid:
       username: root
-      password: root
+      password: Gnkj@12345
+      #password: root
+
+
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/truck_counts?useSSL=false&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      #url: jdbc:mysql://localhost:3306/truck_counts?useSSL=false&characterEncoding=utf-8&serverTimezone=GMT%2B8
+      url: jdbc:mysql://222.74.94.190:3309/truck_counts1?useSSL=false&characterEncoding=utf-8&serverTimezone=GMT%2B8
+
       initialSize: 5
       minIdle: 5
       maxActive: 20

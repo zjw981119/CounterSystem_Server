@@ -1,6 +1,8 @@
 package com.gradproject.server.service;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gradproject.server.dao.RfidMapper;
 import com.gradproject.server.entity.RfidCarNum;
 import com.gradproject.server.entity.model.ReturnCode;
@@ -118,14 +120,24 @@ public class ConfigService {
     /**
      * 获取数据库中所有的rfid与车号的映射关系
      *
-     * @param address
+     * @param address,rfid
      * @return
      */
-    public List<RfidCarNum> getConfigList(String address,String query) throws Exception {
+    public List<RfidCarNum> getConfigList(String address,String rfid,Integer pageNum,Integer pageSize) throws Exception {
         if(StringUtils.isEmpty(address)){
             throw new Exception("地址不可为空！");
         }
         List<RfidCarNum> rfidCarNumList;
+
+        //分页展示
+        PageHelper.startPage(pageNum,pageSize);
+
+        //sql语句需要在startpage()后执行，不然没用
+        rfidCarNumList= mapper.selectRfidByAddressOrRfid(address,rfid);
+        PageInfo<RfidCarNum> pi= new PageInfo<>(rfidCarNumList);
+        logger.info("分页获得的列表为：【{}】。",pi.getList());
+
+        /*
         //不查询，则返回全部对应矿区中的配置信息
         if(query.equals("")){
             rfidCarNumList = mapper.selectRfidByAddress(address);
@@ -135,9 +147,26 @@ public class ConfigService {
         else{
             rfidCarNumList= mapper.selectConfigByAddressAndRfid(address, query);
         }
-
+         */
         //return JSON.toJSONString(rfidCarNumList);
-        return rfidCarNumList;
+        return pi.getList();
+    }
+
+    /**
+     * 获取数据库中所有的rfid与车号的映射关系
+     *
+     * @param address,rfid
+     * @return
+     */
+    public Integer getCountConfig(String address,String rfid) throws Exception {
+        if(StringUtils.isEmpty(address)){
+            throw new Exception("地址不可为空！");
+        }
+        List<RfidCarNum> rfidCarNumList;
+        Integer total;
+        total=mapper.CountConfigByAddressOrRfid(address, rfid);
+
+        return total;
     }
 
     /**
