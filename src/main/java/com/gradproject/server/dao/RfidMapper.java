@@ -46,7 +46,7 @@ public interface RfidMapper {
             "<if test=\"rfid != null and rfid != ''\">And rfid = #{rfid} </if>",
             "</where>",
             "</script>"})
-    Integer CountConfigByAddressOrRfid(@Param("address") String address,@Param("rfid") String rfid);
+    int CountConfigByAddressOrRfid(@Param("address") String address,@Param("rfid") String rfid);
 
     //Options注解设置id自增长
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn = "id")
@@ -59,4 +59,5 @@ public interface RfidMapper {
 
     @Delete("delete from gn_rfid_carnum where rfid = #{rfid}")
     int deleteConfigData(@Param("rfid") String rfid);
+
 }

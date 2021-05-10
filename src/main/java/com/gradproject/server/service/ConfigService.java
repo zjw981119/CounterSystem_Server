@@ -158,12 +158,12 @@ public class ConfigService {
      * @param address,rfid
      * @return
      */
-    public Integer getCountConfig(String address,String rfid) throws Exception {
+    public int getCountConfig(String address,String rfid) throws Exception {
         if(StringUtils.isEmpty(address)){
             throw new Exception("地址不可为空！");
         }
-        List<RfidCarNum> rfidCarNumList;
-        Integer total;
+        //List<RfidCarNum> rfidCarNumList;
+        int total;
         total=mapper.CountConfigByAddressOrRfid(address, rfid);
 
         return total;

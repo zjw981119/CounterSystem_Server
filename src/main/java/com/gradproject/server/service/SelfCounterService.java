@@ -1,6 +1,8 @@
 package com.gradproject.server.service;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gradproject.server.dao.CumulationCounterMapper;
 import com.gradproject.server.dao.SelfCounterMapper;
 import com.gradproject.server.entity.CumulationCounter;
@@ -9,7 +11,7 @@ import com.gradproject.server.entity.SelfCounter;
 import com.gradproject.server.entity.model.ReturnCode;
 import com.gradproject.server.entity.model.SelfResponse;
 import com.gradproject.server.utils.DateUtils;
-import com.sun.xml.internal.bind.v2.model.core.ID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,15 +111,17 @@ public class SelfCounterService {
 //            criteria.andCardNoEqualTo(counter.getCardNo());
             int counterDegree = Smapper.selectCounts(counter.getRfid(), queryBeginTime, queryEndTime);
             //设置次数
-            counter.setSubCounts("" + (counterDegree + 1));
+            counter.setDegree("" + (counterDegree + 1));
             Cucounter.setCounts(counterDegree + 1);
 
 
 
-            //空满载默认值 空载
+            /*
+            空满载默认值 空载
             if (counter.getCarLoad() == null) {
                 counter.setCarLoad("空载");
             }
+            */
 
             //向self_counter数据表中插入数据
             logger.info("插入self_counter数据库中的数据为：【{}】", JSON.toJSONString(counter));
@@ -126,6 +130,7 @@ public class SelfCounterService {
                 logger.info("数据插入self_counter表成功！插入的id为：【{}】", counter.getId());
             }
 
+            /*
             //向cumulation_counter数据表中插入数据
             logger.info("插入cumulation_counter数据库中的数据为：【{}】", JSON.toJSONString(Cucounter));
             List<CumulationCounter> CuCounterList=Cmapper.selectCumulateDataByNumAndDay(carNum,workDay);
@@ -141,6 +146,8 @@ public class SelfCounterService {
             if(Cresult>0){
                 logger.info("数据插入cumulation_counter表成功！");
             }
+            */
+
 
             return response.success();
 //            return response.success("OK");
@@ -178,32 +185,54 @@ public class SelfCounterService {
     /**
      * 查询矿车工作记录
      *
-     * @param beginTime,endTime,carNum
+     * @param beginTime,endTime,carNum,pageNum,pageSize
      * @return
      */
-    public List<SelfCounter> selectRecord(String beginTime,String endTime,String carNum){
+    public List<SelfCounter> selectRecord(String beginTime,String endTime,String carNum,Integer pageNum,Integer pageSize){
         List<SelfCounter> CounterRecordList;
+        /*
         //查询车号为空，则查询时间段内所有记录
         if (carNum.equals("")){
             CounterRecordList=Smapper.selectRecordByTime(beginTime, endTime);
         }
         //查询车号不为空，则只查询该车在时间段内的工作记录
         else {
-            CounterRecordList=Smapper.selectRecordByNumAndTime(carNum,beginTime,endTime);
+            CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,beginTime,endTime);
         }
+        */
+        //分页展示
+        PageHelper.startPage(pageNum,pageSize);
+
+        CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,beginTime,endTime);
         logger.info("查询到的数据有【{}】条", CounterRecordList.size());
         logger.info("查询的工作记录为：【{}】", CounterRecordList);
         //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
         Iterator<SelfCounter> it=CounterRecordList.iterator();
         while (it.hasNext()){
+            /*
             SelfCounter Counter=it.next();
             String Base64Pic=fileService.getBase64(Counter.getId());
             Counter.setPicture(Base64Pic);
+            */
+            SelfCounter Counter=it.next();
+            Counter.setPicture(null);
         }
-        return  CounterRecordList;
+        PageInfo<SelfCounter> pi= new PageInfo<>(CounterRecordList);
+        return  pi.getList();
 
     }
 
+    /**
+     * 查询矿车工作记录条数
+     *
+     * @param beginTime,endTime,carNum,pageNum,pageSize
+     * @return
+     */
+    public int getCountCarRecord(String beginTime,String endTime,String carNum){
+        int total;
+        total=Smapper.CountRecordByDynamic(beginTime, endTime, carNum);
+        return total;
+    }
     /**
      * 根据指定id查询计数数据
      *

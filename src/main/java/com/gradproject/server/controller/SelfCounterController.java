@@ -37,14 +37,19 @@ public class SelfCounterController {
     @GetMapping("/getRecord")
     public SelfResponse getRecordData(@RequestParam(required = true,value = "beginTime") String beginTime,
                                       @RequestParam(required = true,value = "endTime") String endTime,
-                                      @RequestParam(required = false,value = "queryCar") String queryCar){
+                                      @RequestParam(required = false,value = "queryCar") String queryCar,
+                                      @RequestParam(required = false,value = "pagenum") Integer pagenum,
+                                      @RequestParam(required = false,value = "pagesize") Integer pagesize){
         SelfResponse response = new SelfResponse();
         try {
             logger.info("查询时间为：【{}至{}】,查询车号为：【{}】", beginTime,endTime,queryCar);
-            List<SelfCounter> cache= counterService.selectRecord(beginTime, endTime, queryCar);
+            logger.info("当前选中页数为：【{}】。页面数据容量为：【{}】。", pagenum,pagesize);
+            List<SelfCounter> cache= counterService.selectRecord(beginTime, endTime, queryCar,pagenum,pagesize);
+            int total=counterService.getCountCarRecord(beginTime,endTime,queryCar);
             //List<CumulationCounter> cache=cumulateService.getCumulationData(beginTime, endTime);
             logger.info("返回的工作记录数据为：【{}】", cache);
-            return response.success(cache);
+            logger.info("配置矿车工作记录数据总数为：【{}】条。",total);
+            return response.success(cache,total);
         } catch (Exception e){
             logger.error("数据查询异常，异常信息为：【{}】", e.getMessage(), e);
         }
