@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>com.gradproject.server</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>GradServer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>GradServer</name>
+    <description>GradServer backend</description>
 
     <properties>
         <java.version>1.8</java.version>
