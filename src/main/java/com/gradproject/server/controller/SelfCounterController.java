@@ -120,4 +120,17 @@ public class SelfCounterController {
         return response.failure("数据插入异常");
     }
 
+    //提交修改信息
+    @PostMapping("setRecord")
+    public SelfResponse SetRecordData(@RequestBody List<SelfCounter> counterList){
+        SelfResponse response = new SelfResponse();
+        try {
+            logger.info("接收到的修改数据为：【{}】",counterList);
+            //return response;
+        } catch (Exception e){
+            logger.error("数据修改异常，异常信息为：【{}】", e.getMessage(), e);
+        }
+        return response.failure("数据修改异常");
+    }
+
 }
