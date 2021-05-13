@@ -3,7 +3,7 @@ package com.gradproject.server.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.gradproject.server.entity.RfidCarNum;
 import com.gradproject.server.entity.model.SelfResponse;
-import com.gradproject.server.service.ConfigService;
+import com.gradproject.server.service.RfidCarConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Rfidshow")
-public class ConfigController {
+public class RfidCarConfigController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SelfCounterController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RfidCarConfigController.class);
 
     @Autowired
-    private ConfigService configService;
+    private RfidCarConfigService configService;
 
     //@RequestParam("address")
     @GetMapping("/initConfig")

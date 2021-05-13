@@ -17,8 +17,8 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service
-public class ConfigService {
-    private static final Logger logger = LoggerFactory.getLogger(ConfigService.class);
+public class RfidCarConfigService {
+    private static final Logger logger = LoggerFactory.getLogger(RfidCarConfigService.class);
 
     @Resource
     private RfidMapper mapper;

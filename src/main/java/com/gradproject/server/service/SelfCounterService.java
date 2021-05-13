@@ -183,6 +183,34 @@ public class SelfCounterService {
     }
 
     /**
+     * 根据id修改大车统计表
+     *
+     * @param counterList
+     * @return
+     */
+    public SelfResponse setDataById(List<SelfCounter> counterList){
+        SelfResponse response = new SelfResponse();
+        //必传参数不可为空
+        if (ObjectUtils.isEmpty(counterList)) {
+            return response.failure(ReturnCode.DATA_MISS.getMsg());
+        }
+        int result=0;
+
+        //遍历列表，修改车载情况
+        for(int i=0;i<counterList.size();i++){
+            SelfCounter counter = counterList.get(i);
+            //logger.info("获取的对象为：【{}】",counter);
+            result=Smapper.updateDataById(counter.getIsFull(),counter.getMaterial(),counter.getDistance(),
+                    counter.getPrice(),counter.getAdditionalCount(),counter.getId());
+            if (result <= 0) {
+                logger.info("车载情况修改失败");
+                return response.failure("数据库修改异常");
+            }
+        }
+        return response.success();
+    }
+
+    /**
      * 查询矿车工作记录
      *
      * @param beginTime,endTime,carNum,pageNum,pageSize

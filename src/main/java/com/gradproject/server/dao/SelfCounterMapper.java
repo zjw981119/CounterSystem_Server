@@ -66,4 +66,12 @@ public interface SelfCounterMapper {
     //修改车载情况
     @Update("update gn_self_counter set car_load = #{carLoad} where id = #{id}")
     int updateCarloadDataById(@Param("carLoad") String carLoad,@Param("id") Integer id);
+
+    //修改数据(车载、物料、运距、价格、加车数)
+    @Update("update gn_self_counter set is_full = #{isFull}, material = #{materail}, " +
+    "distance = #{distance}, price = #{price}, additional_count = #{additionalCount} " +
+    "where id = #{id}")
+    int updateDataById(@Param("isFull") String isFull,@Param("materail") String materail,
+                       @Param("distance") String distance,@Param("price") String price,
+                       @Param("additionalCount") String additionalCount,@Param("id") Integer id);
 }

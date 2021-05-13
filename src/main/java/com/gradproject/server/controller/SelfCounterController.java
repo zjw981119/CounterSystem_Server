@@ -1,7 +1,6 @@
 package com.gradproject.server.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.gradproject.server.entity.ChangeCarLoad;
 import com.gradproject.server.entity.CumulationCounter;
 import com.gradproject.server.entity.SelfCounter;
 import com.gradproject.server.entity.model.SelfResponse;
@@ -105,27 +104,15 @@ public class SelfCounterController {
         return response.failure("数据插入异常");
     }
 
-    //上传车辆运输记录及图片
-    @PostMapping("/setCarload")
-    public SelfResponse receiveCarID(@RequestBody String CarLoadString){
-        SelfResponse response = new SelfResponse();
-        try {
-            ChangeCarLoad Carload=JSONObject.parseObject(CarLoadString,ChangeCarLoad.class);
-            logger.info("接收到的车载对象数据为：【{}】",Carload);
-            response=counterService.setCarLoadByIdList(Carload.getIdList(),Carload.getCarLoad());
-            return response;
-        } catch (Exception e){
-            logger.error("数据插入异常，异常信息为：【{}】", e.getMessage(), e);
-        }
-        return response.failure("数据插入异常");
-    }
-
     //提交修改信息
     @PostMapping("setRecord")
     public SelfResponse SetRecordData(@RequestBody List<SelfCounter> counterList){
         SelfResponse response = new SelfResponse();
         try {
             logger.info("接收到的修改数据为：【{}】",counterList);
+            response=counterService.setDataById(counterList);
+            return response;
+
             //return response;
         } catch (Exception e){
             logger.error("数据修改异常，异常信息为：【{}】", e.getMessage(), e);
