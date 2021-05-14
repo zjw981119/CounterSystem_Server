@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,8 +20,9 @@ public class CarConfigService {
 
     @Resource
     private CarMapper mapper;
+
     /**
-     * 根据更新时间修改车辆配置表
+     * 根据更新日期修改车辆配置表
      *
      * @param CarConfigList
      * @return
@@ -72,6 +74,52 @@ public class CarConfigService {
 
         return response.success();
     }
+
+    /**
+     * 根据日期查询车辆配置表
+     *
+     * @param date
+     * @return
+     */
+    public SelfResponse selectConfigByTime(String date){
+        SelfResponse response = new SelfResponse();
+        //必传参数不可为空
+        if (StringUtils.isEmpty(date)) {
+            return response.failure(ReturnCode.DATA_MISS.getMsg());
+        }
+
+        //获取配置列表
+        List<CarConfig> DBlist=mapper.SelectConfigByDate(date);
+        logger.info("获取车辆记录为【{}】",DBlist);
+
+        return response.success(DBlist);
+    }
+
+    /**
+     * 根据日期查询车辆配置表
+     *
+     * @param id
+     * @return
+     */
+    public SelfResponse deleteConfigByID(Integer id){
+        SelfResponse response = new SelfResponse();
+        //必传参数不可为空
+        if (ObjectUtils.isEmpty(id)) {
+            return response.failure(ReturnCode.DATA_MISS.getMsg());
+        }
+
+        int result=mapper.deleteConfigByID(id);
+        if (result > 0) {
+            logger.info("配置信息删除成功");
+            return response.success();
+        }
+        else {
+            logger.info("rfid不存在，数据删除失败");
+            return response.failure("rfid不存在");
+        }
+    }
+
+
 
 
 }

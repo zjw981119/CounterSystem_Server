@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface CarMapper {
 
-    //查询是否存在日期为updateTime的配置信息
+    //查询日期为updateTime的配置信息,返回对象列表
     @Select("select * from gn_car_config where update_time = #{updateTime}")
     List<CarConfig> SelectConfigByDate(@Param("updateTime") String updateTime);
 
@@ -27,4 +27,8 @@ public interface CarMapper {
     //删除日期为time的所有数据
     @Delete("delete from gn_car_config where update_time = #{updateTime}")
     int deleteConfigByTime(@Param("updateTime") String updateTime);
+
+    //根据id删除配置数据
+    @Delete("delete from gn_car_config where id = #{id}")
+    int deleteConfigByID(@Param("id") Integer id);
 }
