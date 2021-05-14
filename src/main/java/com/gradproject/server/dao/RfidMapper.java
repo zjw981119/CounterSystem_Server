@@ -34,6 +34,7 @@ public interface RfidMapper {
         "<if test=\"address != null and address != ''\">address = #{address} </if>",
         "<if test=\"rfid != null and rfid != ''\">And rfid = #{rfid} </if>",
       "</where>",
+    "order by car_num ASC",
     "</script>"})
     @ResultMap(value ={"RfidResult"})
     List<RfidCarNum> selectRfidByAddressOrRfid(@Param("address") String address,@Param("rfid") String rfid);

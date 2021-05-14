@@ -29,14 +29,14 @@ public class RfidCarConfigController {
                                 @RequestParam(required = false,value = "pagesize") Integer pagesize){
         SelfResponse response = new SelfResponse();
         try {
+            //logger.info("当前选中页数为：【{}】。页面数据容量为：【{}】。", pagenum,pagesize);
+            //int total= configService.getCountConfig(address, query);
+            //logger.info("配置表数据总数为：【{}】条。",total);
             logger.info("获取矿区：【{}】的配置信息。查询的rfid号为：【{}】。", address,query);
-            logger.info("当前选中页数为：【{}】。页面数据容量为：【{}】。", pagenum,pagesize);
-            List<RfidCarNum> cache = configService.getConfigList(address,query,pagenum,pagesize);
-            int total= configService.getCountConfig(address, query);
+            List<RfidCarNum> cache = configService.getConfigList(address,query);
             logger.info("返回的配置信息为：【{}】", cache);
-            logger.info("配置表数据总数为：【{}】条。",total);
             //logger.info("响应为：【{}】。", response.success(cache,total));
-            return response.success(cache,total);
+            return response.success(cache);
         } catch (Exception e){
             logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
         }

@@ -1,6 +1,7 @@
 package com.gradproject.server.service;
 
-import com.gradproject.server.dao.CarMapper;
+import com.gradproject.server.dao.AuxMacMapper;
+import com.gradproject.server.entity.AuxMacConfig;
 import com.gradproject.server.entity.CarConfig;
 import com.gradproject.server.entity.model.ReturnCode;
 import com.gradproject.server.entity.model.SelfResponse;
@@ -14,38 +15,37 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class CarConfigService {
-
-    private static final Logger logger = LoggerFactory.getLogger(CarConfigService.class);
+public class AuxMacConfigService {
+    private static final Logger logger = LoggerFactory.getLogger(AuxMacConfigService.class);
 
     @Resource
-    private CarMapper mapper;
+    private AuxMacMapper mapper;
 
     /**
-     * 根据日期修改车辆配置表
+     * 根据更新日期修改车辆配置表
      *
-     * @param CarConfigList
+     * @param AuxMacConfigList,updateTime
      * @return
      */
-    public SelfResponse setConfigByTime(List<CarConfig> CarConfigList, String updateTime){
+    public SelfResponse setConfigByTime(List<AuxMacConfig> AuxMacConfigList, String updateTime){
         SelfResponse response = new SelfResponse();
         //必传参数不可为空
-        if (ObjectUtils.isEmpty(CarConfigList)||StringUtils.isEmpty(updateTime)) {
+        if (ObjectUtils.isEmpty(AuxMacConfigList)) {
             return response.failure(ReturnCode.DATA_MISS.getMsg());
         }
         int insertResult=0;
         int deleteResult=0;
 
-        List<CarConfig> DBlist=mapper.SelectConfigByDate(updateTime);
-        //logger.info("获取数据库中记录的长度为【{}】",DBlist.size());
+        List<AuxMacConfig> DBlist=mapper.SelectConfigByDate(updateTime);
+        logger.info("获取数据库中记录的长度为【{}】",DBlist.size());
 
-        //判断车辆配置表中是否有该日记录,若存在记录，则删除再插入，若不存在记录，则直接追加配置信息。
+        //判断车辆配置表中是否有该日记录,若不存在记录，则直接追加配置信息。
         if(DBlist.size()==0){
             //遍历列表，追加配置信息
-            for(int i=0;i<CarConfigList.size();i++){
-                CarConfig config = CarConfigList.get(i);
+            for(int i=0;i<AuxMacConfigList.size();i++){
+                AuxMacConfig config = AuxMacConfigList.get(i);
                 //设置更新日期属性值
-                config.setUpdateTime(updateTime);
+                config.setDate(updateTime);
                 logger.info("获取的对象为：【{}】",config);
                 insertResult=mapper.insertCarConfigData(config);
                 if (insertResult <= 0) {
@@ -63,10 +63,10 @@ public class CarConfigService {
             }
 
             //遍历列表，追加配置信息
-            for(int i=0;i<CarConfigList.size();i++){
-                CarConfig config = CarConfigList.get(i);
+            for(int i=0;i<AuxMacConfigList.size();i++){
+                AuxMacConfig config = AuxMacConfigList.get(i);
                 //设置更新日期属性值
-                config.setUpdateTime(updateTime);
+                config.setDate(updateTime);
                 logger.info("获取的对象为：【{}】",config);
                 insertResult=mapper.insertCarConfigData(config);
                 if (insertResult <= 0) {
@@ -91,17 +91,17 @@ public class CarConfigService {
         if (StringUtils.isEmpty(queryTime)) {
             return response.failure(ReturnCode.DATA_MISS.getMsg());
         }
-
         //获取最新更新日期
         String newestDate=mapper.SelectNewestTime(queryTime);
         //获取配置列表
-        List<CarConfig> carConfigList=mapper.SelectConfigByDate(newestDate);
-        logger.info("获取车辆配置信息为【{}】",carConfigList);
-        return response.success(carConfigList);
+        List<AuxMacConfig> auxmacConfigList=mapper.SelectConfigByDate(newestDate);
+        logger.info("获取辅助车辆配置信息为【{}】",auxmacConfigList);
+
+        return response.success(auxmacConfigList);
     }
 
     /**
-     * 根据id删除配置信息
+     * 根据日期查询车辆配置表
      *
      * @param id
      * @return
@@ -123,8 +123,5 @@ public class CarConfigService {
             return response.failure("rfid不存在");
         }
     }
-
-
-
 
 }

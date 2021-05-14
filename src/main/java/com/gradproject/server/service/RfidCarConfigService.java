@@ -123,33 +123,24 @@ public class RfidCarConfigService {
      * @param address,rfid
      * @return
      */
-    public List<RfidCarNum> getConfigList(String address,String rfid,Integer pageNum,Integer pageSize) throws Exception {
+    public List<RfidCarNum> getConfigList(String address,String rfid) throws Exception {
         if(StringUtils.isEmpty(address)){
             throw new Exception("地址不可为空！");
         }
         List<RfidCarNum> rfidCarNumList;
 
         //分页展示
-        PageHelper.startPage(pageNum,pageSize);
+        //PageHelper.startPage(pageNum,pageSize);
 
         //sql语句需要在startpage()后执行，不然没用
         rfidCarNumList= mapper.selectRfidByAddressOrRfid(address,rfid);
-        PageInfo<RfidCarNum> pi= new PageInfo<>(rfidCarNumList);
-        logger.info("分页获得的列表为：【{}】。",pi.getList());
+        //PageInfo<RfidCarNum> pi= new PageInfo<>(rfidCarNumList);
+        //logger.info("分页获得的列表为：【{}】。",pi.getList());
 
-        /*
-        //不查询，则返回全部对应矿区中的配置信息
-        if(query.equals("")){
-            rfidCarNumList = mapper.selectRfidByAddress(address);
-            filterRfidCarNum(rfidCarNumList);
-        }
-        //查询rfid,则只返回rfid对应的配置信息
-        else{
-            rfidCarNumList= mapper.selectConfigByAddressAndRfid(address, query);
-        }
-         */
+
         //return JSON.toJSONString(rfidCarNumList);
-        return pi.getList();
+        //return pi.getList();
+        return rfidCarNumList;
     }
 
     /**
