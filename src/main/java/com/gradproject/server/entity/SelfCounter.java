@@ -30,8 +30,6 @@ public class SelfCounter {
     //满载情况
     private String isFull;
 
-    private String remark;
-
     //物料
     private String material;
 
@@ -41,6 +39,7 @@ public class SelfCounter {
     //单价
     private String price;
 
-
+    //特殊情况加车数
+    private String additionalCount;
 
 }

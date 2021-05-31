@@ -3,7 +3,7 @@ package com.gradproject.server.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.gradproject.server.entity.RfidCarNum;
 import com.gradproject.server.entity.model.SelfResponse;
-import com.gradproject.server.service.ConfigService;
+import com.gradproject.server.service.RfidCarConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Rfidshow")
-public class ConfigController {
+public class RfidCarConfigController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SelfCounterController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RfidCarConfigController.class);
 
     @Autowired
-    private ConfigService configService;
+    private RfidCarConfigService configService;
 
     //@RequestParam("address")
     @GetMapping("/initConfig")
@@ -29,14 +29,14 @@ public class ConfigController {
                                 @RequestParam(required = false,value = "pagesize") Integer pagesize){
         SelfResponse response = new SelfResponse();
         try {
+            //logger.info("当前选中页数为：【{}】。页面数据容量为：【{}】。", pagenum,pagesize);
+            //int total= configService.getCountConfig(address, query);
+            //logger.info("配置表数据总数为：【{}】条。",total);
             logger.info("获取矿区：【{}】的配置信息。查询的rfid号为：【{}】。", address,query);
-            logger.info("当前选中页数为：【{}】。页面数据容量为：【{}】。", pagenum,pagesize);
-            List<RfidCarNum> cache = configService.getConfigList(address,query,pagenum,pagesize);
-            int total= configService.getCountConfig(address, query);
+            List<RfidCarNum> cache = configService.getConfigList(address,query);
             logger.info("返回的配置信息为：【{}】", cache);
-            logger.info("配置表数据总数为：【{}】条。",total);
             //logger.info("响应为：【{}】。", response.success(cache,total));
-            return response.success(cache,total);
+            return response.success(cache);
         } catch (Exception e){
             logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
         }

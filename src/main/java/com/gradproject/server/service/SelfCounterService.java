@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gradproject.server.dao.CumulationCounterMapper;
 import com.gradproject.server.dao.SelfCounterMapper;
+import com.gradproject.server.entity.CarRecordSelection;
 import com.gradproject.server.entity.CumulationCounter;
 import com.gradproject.server.entity.RfidCarNum;
 import com.gradproject.server.entity.SelfCounter;
@@ -157,23 +158,27 @@ public class SelfCounterService {
         return response.failure("数据库插入异常");
     }
 
+
     /**
-     * 根据id修改车载情况
+     * 根据id修改大车统计表
      *
-     * @param IdList,carLoad
+     * @param counterList
      * @return
      */
-    public SelfResponse setCarLoadByIdList(Integer[] IdList,String carLoad){
-        logger.info("Id列表为：【{}】", Arrays.toString(IdList));
+    public SelfResponse setDataById(List<SelfCounter> counterList){
         SelfResponse response = new SelfResponse();
         //必传参数不可为空
-        if (IdList.length==0) {
+        if (ObjectUtils.isEmpty(counterList)) {
             return response.failure(ReturnCode.DATA_MISS.getMsg());
         }
         int result=0;
-        //遍历数组，修改车载情况
-        for(int i=0;i<IdList.length;i++){
-            result=Smapper.updateCarloadDataById(carLoad,IdList[i]);
+
+        //遍历列表，修改车载情况
+        for(int i=0;i<counterList.size();i++){
+            SelfCounter counter = counterList.get(i);
+            //logger.info("获取的对象为：【{}】",counter);
+            result=Smapper.updateDataById(counter.getIsFull(),counter.getMaterial(),counter.getDistance(),
+                    counter.getPrice(),counter.getAdditionalCount(),counter.getId());
             if (result <= 0) {
                 logger.info("车载情况修改失败");
                 return response.failure("数据库修改异常");
@@ -183,42 +188,73 @@ public class SelfCounterService {
     }
 
     /**
+     * 返回查询日期内选择器中的内容（车号、挖机号、刷卡器编号）
+     *
+     * @param beginTime,endTime
+     * @return
+     */
+    public CarRecordSelection getSelection(String beginTime, String endTime){
+        CarRecordSelection selectionList=new CarRecordSelection();
+        //设置车号选择器属性值
+        selectionList.setCarnumSelection(Smapper.getcarnumSetlection(beginTime, endTime));
+        //设置刷卡器选择器属性值
+        selectionList.setAddressSelection(Smapper.getaddressSetlection(beginTime, endTime));
+        //设置挖机选择器属性值
+        selectionList.setDiggerSelection(Smapper.getdiggerSetlection(beginTime, endTime));
+        //logger.info("选择器对象的数据为【{}】", selectionList);
+        return selectionList;
+    }
+
+    /**
      * 查询矿车工作记录
      *
      * @param beginTime,endTime,carNum,pageNum,pageSize
      * @return
      */
-    public List<SelfCounter> selectRecord(String beginTime,String endTime,String carNum,Integer pageNum,Integer pageSize){
+    public List<SelfCounter> selectRecord(String beginTime,String endTime,String carNum,String address,String grabcarNum,Integer pageNum,Integer pageSize){
         List<SelfCounter> CounterRecordList;
-        /*
-        //查询车号为空，则查询时间段内所有记录
-        if (carNum.equals("")){
-            CounterRecordList=Smapper.selectRecordByTime(beginTime, endTime);
-        }
-        //查询车号不为空，则只查询该车在时间段内的工作记录
-        else {
-            CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,beginTime,endTime);
-        }
-        */
-        //分页展示
-        PageHelper.startPage(pageNum,pageSize);
 
-        CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,beginTime,endTime);
-        logger.info("查询到的数据有【{}】条", CounterRecordList.size());
-        logger.info("查询的工作记录为：【{}】", CounterRecordList);
-        //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
-        Iterator<SelfCounter> it=CounterRecordList.iterator();
-        while (it.hasNext()){
+        //车号、挖机号、刷卡器编号如果有一个不为空，则不进行分页
+        if(!StringUtils.isEmpty(carNum)||!StringUtils.isEmpty(address)
+                ||!StringUtils.isEmpty(grabcarNum)){
+            CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,address,grabcarNum,beginTime,endTime);
+            logger.info("查询到的数据有【{}】条", CounterRecordList.size());
+            logger.info("查询的工作记录为：【{}】", CounterRecordList);
+            //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
+            Iterator<SelfCounter> it=CounterRecordList.iterator();
+            while (it.hasNext()){
             /*
             SelfCounter Counter=it.next();
             String Base64Pic=fileService.getBase64(Counter.getId());
             Counter.setPicture(Base64Pic);
             */
-            SelfCounter Counter=it.next();
-            Counter.setPicture(null);
+                SelfCounter Counter=it.next();
+                Counter.setPicture(null);
+            }
+            return CounterRecordList;
         }
-        PageInfo<SelfCounter> pi= new PageInfo<>(CounterRecordList);
-        return  pi.getList();
+        //按照日期时间查询，则进行分页
+        else{
+            //分页展示
+            PageHelper.startPage(pageNum,pageSize);
+
+            CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,address,grabcarNum,beginTime,endTime);
+            logger.info("查询到的数据有【{}】条", CounterRecordList.size());
+            logger.info("查询的工作记录为：【{}】", CounterRecordList);
+            //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
+            Iterator<SelfCounter> it=CounterRecordList.iterator();
+            while (it.hasNext()){
+            /*
+            SelfCounter Counter=it.next();
+            String Base64Pic=fileService.getBase64(Counter.getId());
+            Counter.setPicture(Base64Pic);
+            */
+                SelfCounter Counter=it.next();
+                Counter.setPicture(null);
+            }
+            PageInfo<SelfCounter> pi= new PageInfo<>(CounterRecordList);
+            return  pi.getList();
+        }
 
     }
 

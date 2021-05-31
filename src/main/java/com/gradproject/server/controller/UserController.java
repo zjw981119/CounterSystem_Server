@@ -19,8 +19,7 @@ public class UserController {
     @PostMapping("/login")
     public SelfResponse login(@RequestBody User user){
         logger.info("用户名：【{}】, 密码：【{}】", user.getUsername(),user.getPassword());
-        SelfResponse response = new SelfResponse();
-        response= userService.matchAdmin(user);
+        SelfResponse response = userService.matchAdmin(user);
         return response;
     }
 }

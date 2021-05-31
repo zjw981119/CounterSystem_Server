@@ -34,7 +34,7 @@ public class UserService {
         }
         String password=mapper.selectPasswordByName(user.getUsername());
         //判断用户名密码是否正确
-        if(password.equals(user.getPassword())){
+        if(user.getPassword().equals(password)){
             return response.success("登陆成功");
         }
         else {
