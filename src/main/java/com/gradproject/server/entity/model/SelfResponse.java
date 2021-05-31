@@ -7,7 +7,7 @@ public class SelfResponse {
 
     private Meta result;
     private Object data;
-    public Integer total=null;
+    public int total;
 
     public SelfResponse success() {
         this.result = new Meta(true, OK, ReturnCode.SUCCESS);
@@ -21,6 +21,18 @@ public class SelfResponse {
     }
 
     public SelfResponse success(Object data,Integer total) {
+        this.result = new Meta(true, OK, ReturnCode.SUCCESS);
+        this.data = data;
+        this.total= total;
+        return this;
+    }
+    public SelfResponse success(Object data,String message) {
+        this.result = new Meta(true, message, ReturnCode.SUCCESS);
+        this.data = data;
+        return this;
+    }
+
+    public SelfResponse success(Object data,int total) {
         this.result = new Meta(true, OK, ReturnCode.SUCCESS);
         this.data = data;
         this.total= total;

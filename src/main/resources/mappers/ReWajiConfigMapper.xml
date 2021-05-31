@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gradproject.server.dao.ReWajiConfigMapper">
+  <resultMap id="BaseResultMap" type="com.gradproject.server.entity.ReWajiConfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="car_id" jdbcType="VARCHAR" property="carId" />
+    <result column="car_type" jdbcType="VARCHAR" property="carType" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="oil_price" jdbcType="VARCHAR" property="oilPrice" />
+    <result column="salary" jdbcType="DOUBLE" property="salary" />
+    <result column="maintenance_fee" jdbcType="DOUBLE" property="maintenanceFee" />
+    <result column="meal_fee" jdbcType="DOUBLE" property="mealFee" />
+    <result column="accessory_fee" jdbcType="DOUBLE" property="accessoryFee" />
+    <result column="penalty" jdbcType="DOUBLE" property="penalty" />
+    <result column="reward" jdbcType="DOUBLE" property="reward" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from re_waji_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gradproject.server.entity.ReWajiConfig">
+    insert into re_waji_config (id, date, car_id, 
+      car_type, type, owner_name, 
+      oil_price, salary, maintenance_fee, 
+      meal_fee, accessory_fee, penalty, 
+      reward)
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=VARCHAR}, #{carId,jdbcType=VARCHAR}, 
+      #{carType,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR}, 
+      #{oilPrice,jdbcType=VARCHAR}, #{salary,jdbcType=DOUBLE}, #{maintenanceFee,jdbcType=DOUBLE}, 
+      #{mealFee,jdbcType=DOUBLE}, #{accessoryFee,jdbcType=DOUBLE}, #{penalty,jdbcType=DOUBLE}, 
+      #{reward,jdbcType=DOUBLE})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gradproject.server.entity.ReWajiConfig">
+    update re_waji_config
+    set date = #{date,jdbcType=VARCHAR},
+      car_id = #{carId,jdbcType=VARCHAR},
+      car_type = #{carType,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      oil_price = #{oilPrice,jdbcType=VARCHAR},
+      salary = #{salary,jdbcType=DOUBLE},
+      maintenance_fee = #{maintenanceFee,jdbcType=DOUBLE},
+      meal_fee = #{mealFee,jdbcType=DOUBLE},
+      accessory_fee = #{accessoryFee,jdbcType=DOUBLE},
+      penalty = #{penalty,jdbcType=DOUBLE},
+      reward = #{reward,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oil_price, salary, maintenance_fee, 
+    meal_fee, accessory_fee, penalty, reward
+    from re_waji_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oil_price, salary, maintenance_fee, 
+    meal_fee, accessory_fee, penalty, reward
+    from re_waji_config
+  </select>
+  <select id="selectByDate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oil_price, salary, maintenance_fee,
+      meal_fee, accessory_fee, penalty, reward
+    from re_waji_config
+    where date = #{date,jdbcType=VARCHAR}
+  </select>
+</mapper>
