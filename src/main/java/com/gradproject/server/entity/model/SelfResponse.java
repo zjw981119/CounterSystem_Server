@@ -20,6 +20,12 @@ public class SelfResponse {
         return this;
     }
 
+    public SelfResponse success(Object data,String message) {
+        this.result = new Meta(true, message, ReturnCode.SUCCESS);
+        this.data = data;
+        return this;
+    }
+
     public SelfResponse success(Object data,int total) {
         this.result = new Meta(true, OK, ReturnCode.SUCCESS);
         this.data = data;

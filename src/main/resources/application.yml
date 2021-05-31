@@ -19,11 +19,13 @@ spring:
       minIdle: 5
       maxActive: 20
 #Mapper.xml所在的位置
-mybatis:
-  #  mapper-locations: classpath:mybatis/mapping/*.xml
+mybatis-plus:
+  #mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mappers/*.xml
   #扫描的包名
   type-aliases-package: com.gradproject.server.entity
   config-location: classpath:mybatis/mybatis.cfg.xml
   #设置，mapper 接口路径，mapper 接口对应的xml 配置文件
   package:
     path: com.gradproject.server.dao
+
