@@ -9,9 +9,11 @@ import java.util.List;
 @Mapper
 public interface CarMapper {
 
-    //查询最接近queryTime的配置信息修改时间
-    @Select("select MAX(update_time) from gn_car_config where update_time <= #{queryTime}")
-    String SelectNewestTime(@Param("queryTime") String queryTime);
+    //查询最接近queryTime的配置信息，返回对象列表
+    @Select("select * from gn_car_config where update_time = " +
+            "(select MAX(update_time) from gn_car_config where update_time <= #{queryTime}) "+
+            "order by car_num ASC")
+    List<CarConfig> selectNewestConfig(@Param("queryTime") String queryTime);
 
     //查询日期为updateTime的配置信息,返回对象列表
     @Select("select * from gn_car_config where update_time = #{updateTime} order by car_num ASC")

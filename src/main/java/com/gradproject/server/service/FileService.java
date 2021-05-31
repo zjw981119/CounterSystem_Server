@@ -7,11 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.util.Base64;
 import java.util.Date;
 
 @Service
@@ -65,18 +68,20 @@ public class FileService {
      *
      * @param id
      */
-    public String getBase64(Integer id){
+    public void showImage(Integer id, HttpServletRequest request, HttpServletResponse response){
 
         //获取数据库中对应id的记录中的picture列的数据，为保存图片base64编码文本的地址
         String picPath = counterService.findCounterPicById(id);
-        String base64Str = null;
-        try {
-            //将txt文件读取为字节数组
+        try (OutputStream outputStream = response.getOutputStream()){
             Path path = Paths.get(picPath);
+            //文件不存在，则结束
+            if(!Files.exists(path)){
+                return;
+            }
+            //将txt文件读取为字节数组
             byte[] data = Files.readAllBytes(path);
             //将base64转为String
-            base64Str = new String(data);
-            /*
+            String base64Str = new String(data);
             //替换base64格式头部
             base64Str = base64Str.replace("data:image/jpg;base64,", "");
             //解码，将base64转为图像
@@ -86,11 +91,10 @@ public class FileService {
             byteArrayInputStream.write(data);
             byteArrayInputStream.writeTo(outputStream);
             //outputStream.write(data);
-            */
+
 
         } catch (IOException e) {
-            logger.error("获取图片base64编码异常，异常信息为：【{}】", e.getMessage(), e);
+            logger.error("图片显示失败，异常信息为：【{}】", e.getMessage(), e);
         }
-        return base64Str;
     }
 }

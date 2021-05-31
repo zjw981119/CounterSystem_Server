@@ -91,11 +91,8 @@ public class CarConfigService {
         if (StringUtils.isEmpty(queryTime)) {
             return response.failure(ReturnCode.DATA_MISS.getMsg());
         }
-
-        //获取最新更新日期
-        String newestDate=mapper.SelectNewestTime(queryTime);
         //获取配置列表
-        List<CarConfig> carConfigList=mapper.SelectConfigByDate(newestDate);
+        List<CarConfig> carConfigList=mapper.selectNewestConfig(queryTime);
         logger.info("获取车辆配置信息为【{}】",carConfigList);
         return response.success(carConfigList);
     }

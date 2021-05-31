@@ -13,6 +13,7 @@
     <artifactId>GradServer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>GradServer</name>
+    <packaging>war</packaging>
     <description>GradServer backend</description>
 
     <properties>
@@ -92,11 +93,20 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
-                <!--                <exclusion>-->
-                <!--                    <groupId>org.springframework.boot</groupId>-->
-                <!--                    <artifactId>spring-boot-starter-tomcat</artifactId>-->
-                <!--                </exclusion>-->
+                <!--忽略内嵌tomcat，打包部署到tomcat。注*本地运行的时候要把这一段忽略引入个注释掉，要不然项目启动不了-->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
             </exclusions>
+        </dependency>
+
+        <!--添加servlet-api依赖-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -119,6 +129,7 @@
     </dependencies>
 
     <build>
+        <finalName>Server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
