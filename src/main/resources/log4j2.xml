@@ -6,14 +6,14 @@
     <properties>
         <!--变量定义 -->
         <!--        <Property name="baseDir">/Volumes/D/logs</Property>-->
-        <Property name="baseDir">D:/files/logs</Property>
+        <Property name="baseDir">D:/files/PANHlogs</Property>
         <Property name="basePattern">[%d{yyyy-MM-dd HH:mm:ss:SSS}]-[%5p]-[%21t]-[%C{5.}(%L)]-%m%n</Property>
     </properties>
     <appenders>
         <!-- 配置日志输出文件名字 追加读写 -->
         <RollingFile name="main"
-                     fileName="${baseDir}/GuangNaReceived.log"
-                     filePattern="${baseDir}/GuangNaReceived.log.%d{yyyy-MM-dd}"
+                     fileName="${baseDir}/PanHongCounting.log"
+                     filePattern="${baseDir}/PanHongCounting.log.%d{yyyy-MM-dd}"
                      append="true">
             <PatternLayout
                     pattern="${basePattern}" />

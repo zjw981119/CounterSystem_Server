@@ -54,7 +54,7 @@ public interface SelfCounterMapper {
             "<if test=\"grabCarNum != null and grabCarNum != ''\">And grab_car_no = #{grabCarNum} </if>",
             "</where>",
             "</script>"})
-    List<SelfCounter> selectRecordByNumOrTime(@Param("carNum") String carNum, @Param("address") String address, @Param("grabCarNum") String grabCarNum,
+    List<SelfCounter> selectRecordByQuery(@Param("carNum") String carNum, @Param("address") String address, @Param("grabCarNum") String grabCarNum,
                                               @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 
     //根据车号和时间段动态查询矿车的工作记录数量

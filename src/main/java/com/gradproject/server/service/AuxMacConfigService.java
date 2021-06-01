@@ -91,10 +91,8 @@ public class AuxMacConfigService {
         if (StringUtils.isEmpty(queryTime)) {
             return response.failure(ReturnCode.DATA_MISS.getMsg());
         }
-        //获取最新更新日期
-        String newestDate=mapper.SelectNewestTime(queryTime);
         //获取配置列表
-        List<AuxMacConfig> auxmacConfigList=mapper.SelectConfigByDate(newestDate);
+        List<AuxMacConfig> auxmacConfigList=mapper.selectNewestConfig(queryTime);
         logger.info("获取辅助车辆配置信息为【{}】",auxmacConfigList);
 
         return response.success(auxmacConfigList);

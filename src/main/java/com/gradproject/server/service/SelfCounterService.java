@@ -217,41 +217,28 @@ public class SelfCounterService {
         //车号、挖机号、刷卡器编号如果有一个不为空，则不进行分页
         if(!StringUtils.isEmpty(carNum)||!StringUtils.isEmpty(address)
                 ||!StringUtils.isEmpty(grabcarNum)){
-            CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,address,grabcarNum,beginTime,endTime);
+            CounterRecordList=Smapper.selectRecordByQuery(carNum,address,grabcarNum,beginTime,endTime);
             logger.info("查询到的数据有【{}】条", CounterRecordList.size());
             logger.info("查询的工作记录为：【{}】", CounterRecordList);
+            /*
             //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
             Iterator<SelfCounter> it=CounterRecordList.iterator();
             while (it.hasNext()){
-            /*
             SelfCounter Counter=it.next();
             String Base64Pic=fileService.getBase64(Counter.getId());
             Counter.setPicture(Base64Pic);
-            */
-                SelfCounter Counter=it.next();
-                Counter.setPicture(null);
             }
+            **/
+
             return CounterRecordList;
         }
         //按照日期时间查询，则进行分页
         else{
             //分页展示
             PageHelper.startPage(pageNum,pageSize);
-
-            CounterRecordList=Smapper.selectRecordByNumOrTime(carNum,address,grabcarNum,beginTime,endTime);
+            CounterRecordList=Smapper.selectRecordByQuery(carNum,address,grabcarNum,beginTime,endTime);
             logger.info("查询到的数据有【{}】条", CounterRecordList.size());
             logger.info("查询的工作记录为：【{}】", CounterRecordList);
-            //遍历返回的列表，读取本地txt文本，将保存的base64编码返回给前端
-            Iterator<SelfCounter> it=CounterRecordList.iterator();
-            while (it.hasNext()){
-            /*
-            SelfCounter Counter=it.next();
-            String Base64Pic=fileService.getBase64(Counter.getId());
-            Counter.setPicture(Base64Pic);
-            */
-                SelfCounter Counter=it.next();
-                Counter.setPicture(null);
-            }
             PageInfo<SelfCounter> pi= new PageInfo<>(CounterRecordList);
             return  pi.getList();
         }

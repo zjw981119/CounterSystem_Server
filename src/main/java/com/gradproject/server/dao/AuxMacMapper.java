@@ -8,9 +8,11 @@ import java.util.List;
 @Mapper
 public interface AuxMacMapper {
 
-    //查询最接近queryTime的配置信息修改时间
-    @Select("select MAX(date) from re_auxiliarymachinery_config where date <= #{queryTime}")
-    String SelectNewestTime(@Param("queryTime") String queryTime);
+    //查询最接近queryTime的配置信息
+    @Select("select * from re_auxiliarymachinery_config where date = " +
+            "(select MAX(date) from re_auxiliarymachinery_config where date <= #{queryTime}) "+
+            "order by car_id ASC")
+    List<AuxMacConfig> selectNewestConfig(@Param("queryTime") String queryTime);
 
     //查询日期为updateTime的配置信息,返回对象列表
     @Select("select * from re_auxiliarymachinery_config where date = #{updateTime} order by car_id ASC" )
