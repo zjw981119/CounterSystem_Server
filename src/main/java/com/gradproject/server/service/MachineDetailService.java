@@ -39,12 +39,14 @@ public class MachineDetailService {
             machineDetails_Excavator = machineDetailMapper.selectMachineDetail_Excavator(beginTime_Date,endTime_Date,trackNo);
             machineDetails_AssistCar = machineDetailMapper.selectMachineDetail_AssistCar(beginTime_Date,endTime_Date);
             machineDetails_BigCar.addAll(machineDetails_Excavator);
-            machineDetails_BigCar.addAll(machineDetails_AssistCar);
         }catch (Exception e){
             log.info("数据库异常：{}，信息：{}", e.getMessage(), e);
             return response.failure("数据库访问异常");
         }
-        List<MachineDetail> allSameCarTotal = getSameCarTotal(machineDetails_BigCar);
+        List<MachineDetail> allCalculation = getCalculation(machineDetails_BigCar);
+        List<MachineDetail> allSameCarTotal = getSameCarTotal(allCalculation);
+        //辅助车辆先不合计
+        allSameCarTotal.addAll(machineDetails_AssistCar);
         log.info("机械明细表查询成功,all车：{}",allSameCarTotal);
         return response.success(allSameCarTotal);
     }
@@ -64,28 +66,94 @@ public class MachineDetailService {
         return response.success(allcar);
 
     }
-    public List<MachineDetail> getSameCarTotal(List<MachineDetail> allSameCarTotal){
-        int flag = 0;
-        int tripNumSum = 0;
-        float unitPriceSum = 0;
+    //计算其他字段的值
+    public List<MachineDetail> getCalculation(List<MachineDetail> allCarCalculation){
+        for(MachineDetail car : allCarCalculation){
+            car.setLoadTransportIncome(car.getTripNum()*car.getMultiple()*car.getUnitPrice());
+            car.setBiaoxiangCar(car.getMultiple()*car.getTripNum());
+            car.setVolume(car.getBiaoxiangCar()*car.getBiaoxiang());
+            car.setLoadCoalIncome(car.getTripNum()*car.getUnitPrice());
+            car.setGrossIncome(car.getLoadTransportIncome()+car.getTimeIncome()+car.getLoadCoalIncome());
+            car.setFuelFee(car.getSumOilL()*car.getUnitPrice());
+            car.setProfit(car.getGrossIncome()-car.getFuelFee()-car.getSalary()-car.getMaintenanceFee()-car.getMealFee()
+            -car.getAccessoryFee()-car.getPenalty()+car.getReward());
+            car.setOilConsumePerCar(car.getSumOilL()/car.getTripNum());
+            car.setOilConsumeRatio(car.getFuelFee()/car.getProfit());
 
-        for(int i=0,j=i+1;i<allSameCarTotal.size()&& j != allSameCarTotal.size();i++,j++){
-            if(!allSameCarTotal.get(i).getCarNo().equals(allSameCarTotal.get(j).getCarNo())){
+        }
+        return allCarCalculation;
+
+    }
+    //连续的相同车号的合计
+    public List<MachineDetail> getSameCarTotal(List<MachineDetail> allSameCarTotal){
+        int flag = 0;//永远指向同一车号的第一个
+        int tripNumSum = 0;
+        float transportDistanceSum = 0;
+        float loadTransportIncomeSum = 0;
+        float biaoxiangCarSum = 0;
+        float volumeSum = 0;
+        float loadCoalIncomeSum = 0;
+        float grossIncomeSum = 0;
+        float fuelFeeSum = 0;
+        float salarySum = 0,maintenanceFeeSum = 0,mealFeeSum = 0,accessoryFeeSum = 0,penaltySum = 0,rewardSum = 0;
+        float profitSum = 0;
+        //注意最后一次合计的情况
+        for(int i=0,j=i+1;i<allSameCarTotal.size()&& j <=allSameCarTotal.size();i++,j++){
+            if(j==allSameCarTotal.size() ? true : !allSameCarTotal.get(i).getCarNo().equals(allSameCarTotal.get(j).getCarNo())){
                 MachineDetail machineDetail =new MachineDetail();
+                //合计相同车号的对应字段
                 for(;flag<j;flag++){
                     tripNumSum += allSameCarTotal.get(flag).getTripNum();
-                    unitPriceSum += allSameCarTotal.get(flag).getUnitPrice();
+                    transportDistanceSum += allSameCarTotal.get(flag).getTransportDistance();
+                    loadTransportIncomeSum += allSameCarTotal.get(flag).getLoadTransportIncome();
+                    biaoxiangCarSum += allSameCarTotal.get(flag).getBiaoxiangCar();
+                    volumeSum += allSameCarTotal.get(flag).getVolume();
+                    loadCoalIncomeSum+= allSameCarTotal.get(flag).getLoadCoalIncome();
+                    grossIncomeSum += allSameCarTotal.get(flag).getGrossIncome();
+                    fuelFeeSum += allSameCarTotal.get(flag).getFuelFee();
+                    salarySum += allSameCarTotal.get(flag).getSalary();
+                    maintenanceFeeSum += allSameCarTotal.get(flag).getMaintenanceFee();
+                    mealFeeSum += allSameCarTotal.get(flag).getMealFee();
+                    accessoryFeeSum += allSameCarTotal.get(flag).getAccessoryFee();
+                    penaltySum += allSameCarTotal.get(flag).getPenalty();
+                    rewardSum += allSameCarTotal.get(flag).getReward();
+                    profitSum += allSameCarTotal.get(flag).getProfit();
                 }
+                //添加合计
                 machineDetail.setCarNo("合计");
                 machineDetail.setCarType("-----");
                 machineDetail.setTripNum(tripNumSum);
-                machineDetail.setUnitPrice(unitPriceSum);
+                machineDetail.setTransportDistance(transportDistanceSum);
+                machineDetail.setLoadTransportIncome(loadTransportIncomeSum);
+                machineDetail.setBiaoxiangCar(biaoxiangCarSum);
+                machineDetail.setVolume(volumeSum);
+                machineDetail.setLoadCoalIncome(loadCoalIncomeSum);
+                machineDetail.setGrossIncome(grossIncomeSum);
+                machineDetail.setFuelFee(fuelFeeSum);
+                machineDetail.setSalary(salarySum);
+                machineDetail.setMaintenanceFee(maintenanceFeeSum);
+                machineDetail.setMealFee(mealFeeSum);
+                machineDetail.setAccessoryFee(accessoryFeeSum);
+                machineDetail.setPenalty(penaltySum);
+                machineDetail.setReward(rewardSum);
+                machineDetail.setProfit(profitSum);
+                //重置
                 tripNumSum = 0;
-                unitPriceSum = 0;
+                transportDistanceSum = 0;
+                loadTransportIncomeSum = 0;
+                biaoxiangCarSum = 0;
+                volumeSum = 0;
+                loadCoalIncomeSum = 0;
+                grossIncomeSum = 0;
+                fuelFeeSum = 0;
+                salarySum = 0;maintenanceFeeSum = 0;mealFeeSum = 0;accessoryFeeSum = 0;penaltySum = 0;rewardSum = 0;
+                profitSum = 0;
+
                 allSameCarTotal.add(j,machineDetail);
+                //跳过新增的合计记录的索引
                 i++;
                 j++;
-                flag = j;
+                flag = j;//指向下一车号的第一个
             } else {
                 continue;
             }

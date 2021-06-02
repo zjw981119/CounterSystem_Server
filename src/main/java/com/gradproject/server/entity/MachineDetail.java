@@ -22,9 +22,21 @@ public class MachineDetail {
     private float biaoxiang;
     private float sumOilL;
 
+    //需要计算的字段
+    private float loadTransportIncome;
+    private float biaoxiangCar;
+    private float volume;
+    private float loadCoalIncome;
+    private float grossIncome;
+    private float fuelFee;
+    private float profit;
+    private float oilConsumePerCar;
+    private float oilConsumeRatio;
+
     //挖机字段
     private String material;
     private float timeIncome;
+
     //查询字段
     private String beginTime;
     private String endTime;

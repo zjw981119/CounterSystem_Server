@@ -64,14 +64,13 @@ public interface MachineDetailMapper {
 
     @Select("<script>"
             +"SELECT"
-            +" re_auxiliarymachinery_price_config.id,re_auxiliarymachinery_config.car_type,re_auxiliarymachinery_config.car_id as car_no,"
-            +"re_auxiliarymachinery_config.price as unitprice,re_auxiliarymachinery_price_config.oil_num as sum_oil_L"
-            +" FROM re_auxiliarymachinery_config,re_auxiliarymachinery_price_config "//****注意空格****
+            +" id,car_type,car_id as car_no,"
+            +"price as unitprice,oil_num as sum_oil_L"
+            +" FROM re_auxiliarymachinery_price_config "//****注意空格****
             +"<where>"
-            +"<if test=\"beginTime_Date !=null and beginTime_Date !=''\">re_auxiliarymachinery_price_config.date &gt;= #{beginTime_Date} </if>"
-            +"<if test=\"endTime_Date !=null and endTime_Date !=''\">and re_auxiliarymachinery_price_config.date &lt;= #{endTime_Date} </if>"
-            +"and re_auxiliarymachinery_config.car_id = re_auxiliarymachinery_price_config.car_id"
+            +"date = (select max(date) from re_auxiliarymachinery_price_config)"
             +"</where>"
+            +"ORDER BY car_id ASC"
             +"</script>")
     @ResultMap(value ={"BaseMap"})
     List<MachineDetail> selectMachineDetail_AssistCar(@Param("beginTime_Date") String beginTime_Date,@Param("endTime_Date") String endTime_Date);
