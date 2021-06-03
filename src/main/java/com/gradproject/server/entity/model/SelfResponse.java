@@ -55,6 +55,11 @@ public class SelfResponse {
         this.data = "请重新登录";
         return this;
     }
+    public SelfResponse error(Object data) {
+        this.result = new Meta(false, ERROR, ReturnCode.FAILURE);
+        this.data = data;
+        return this;
+    }
 
     public Meta getResult() {
         return result;
@@ -63,6 +68,8 @@ public class SelfResponse {
     public Object getData() {
         return data;
     }
+
+
 
     public class Meta {
 
