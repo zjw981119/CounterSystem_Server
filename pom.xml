@@ -94,10 +94,10 @@
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
                 <!--忽略内嵌tomcat，打包部署到tomcat。注*本地运行的时候要把这一段忽略引入个注释掉，要不然项目启动不了-->
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
+<!--                <exclusion>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--                </exclusion>-->
             </exclusions>
         </dependency>
 
@@ -153,25 +153,7 @@
                 </dependencies>
             </plugin>
         </plugins>
-
         <resources>
-<!--             如果不添加此节点mybatis的mapper.xml文件都会被漏掉。-->
-<!--                <resource>-->
-<!--                    <directory>src/main/java</directory>-->
-<!--                    <includes>-->
-<!--                        <include>**/*.properties</include>-->
-<!--                        <include>**/*.xml</include>-->
-<!--                    </includes>-->
-<!--                    <filtering>false</filtering>-->
-<!--                </resource>-->
-<!--                <resource>-->
-<!--                    <directory>src/main/resources</directory>-->
-<!--                    <includes>-->
-<!--                        <include>**/*.properties</include>-->
-<!--                        <include>**/*.xml</include>-->
-<!--                    </includes>-->
-<!--                    <filtering>false</filtering>-->
-<!--                </resource>-->
 
             <!--编译后对xml进行资源拷贝-->
             <resource>
@@ -200,14 +182,6 @@
                     <include>**/**</include>
                 </includes>
             </resource>
-<!--            <resource>-->
-<!--                <directory>src/main/resources</directory>-->
-<!--                &lt;!&ndash; 开启过滤，用指定的参数替换directory下的文件中的参数 &ndash;&gt;-->
-<!--                <filtering>false</filtering>-->
-<!--                <includes>-->
-<!--                    <include>**/**.xlsx</include>-->
-<!--                </includes>-->
-<!--            </resource>-->
         </resources>
 
     </build>
