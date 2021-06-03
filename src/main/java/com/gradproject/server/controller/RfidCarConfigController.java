@@ -43,6 +43,20 @@ public class RfidCarConfigController {
         return response.failure("数据读取异常");
     }
 
+    @GetMapping("/getCarnum")
+    public SelfResponse getCarnumSelection(@RequestParam(required = true,value="address") String address){
+        SelfResponse response = new SelfResponse();
+        try {
+            logger.info("获取矿区：【{}】的车号信息。", address);
+            String[] cache = configService.getCarnumList(address);
+            //logger.info("响应为：【{}】。", response.success(cache,total));
+            return response.success(cache);
+        } catch (Exception e){
+            logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
+        }
+        return response.failure("数据读取异常");
+    }
+
     //删除配置信息
     @GetMapping("/delete")
     public SelfResponse deleteConfigData(@RequestParam(required = true,name="rfid") String rfid){
@@ -52,7 +66,7 @@ public class RfidCarConfigController {
             response = configService.removeConfigData(rfid);
             return response;
         } catch (Exception e){
-            logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
+            logger.error("数据删除异常，异常信息为：【{}】", e.getMessage(), e);
         }
         return response.failure("数据删除异常");
     }

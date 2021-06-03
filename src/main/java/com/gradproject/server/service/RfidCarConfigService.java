@@ -137,14 +137,28 @@ public class RfidCarConfigService {
         //PageInfo<RfidCarNum> pi= new PageInfo<>(rfidCarNumList);
         //logger.info("分页获得的列表为：【{}】。",pi.getList());
 
-
         //return JSON.toJSONString(rfidCarNumList);
         //return pi.getList();
         return rfidCarNumList;
     }
 
     /**
-     * 获取数据库中所有的rfid与车号的映射关系
+     * 获取数据库中所有不重复的车号列表
+     *
+     * @param address
+     * @return
+     */
+    public String[] getCarnumList(String address) throws Exception {
+        if(StringUtils.isEmpty(address)){
+            throw new Exception("地址不可为空！");
+        }
+        String[] carList;
+        carList= mapper.selectAllCarnum(address);
+        return carList;
+    }
+
+    /**
+     * 获取RFID配置信息总数
      *
      * @param address,rfid
      * @return
