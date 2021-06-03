@@ -15,6 +15,7 @@
     <result column="accessory_fee" jdbcType="DOUBLE" property="accessoryFee" />
     <result column="penalty" jdbcType="DOUBLE" property="penalty" />
     <result column="reward" jdbcType="DOUBLE" property="reward" />
+    <result column="ratio" jdbcType="DOUBLE" property="ratio" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from re_waji_config
@@ -22,13 +23,14 @@
   </delete>
   <insert id="insert" parameterType="com.gradproject.server.entity.ReWajiConfig">
     insert into re_waji_config (id, date, car_id, 
-      car_type, type, owner_name, 
+      car_type, type, owner_name, ratio,
       oil_price, salary, maintenance_fee, 
       meal_fee, accessory_fee, penalty, 
       reward)
     values (#{id,jdbcType=INTEGER}, #{date,jdbcType=VARCHAR}, #{carId,jdbcType=VARCHAR}, 
       #{carType,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR}, 
-      #{oilPrice,jdbcType=VARCHAR}, #{salary,jdbcType=DOUBLE}, #{maintenanceFee,jdbcType=DOUBLE}, 
+      #{ratio,jdbcType=DOUBLE},#{oilPrice,jdbcType=VARCHAR},#{salary,jdbcType=DOUBLE},
+      #{maintenanceFee,jdbcType=DOUBLE},
       #{mealFee,jdbcType=DOUBLE}, #{accessoryFee,jdbcType=DOUBLE}, #{penalty,jdbcType=DOUBLE}, 
       #{reward,jdbcType=DOUBLE})
   </insert>
@@ -40,6 +42,7 @@
       type = #{type,jdbcType=VARCHAR},
       owner_name = #{ownerName,jdbcType=VARCHAR},
       oil_price = #{oilPrice,jdbcType=VARCHAR},
+      ratio = #{ratio,jdbcType=DOUBLE},
       salary = #{salary,jdbcType=DOUBLE},
       maintenance_fee = #{maintenanceFee,jdbcType=DOUBLE},
       meal_fee = #{mealFee,jdbcType=DOUBLE},
@@ -49,20 +52,24 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, date, car_id, car_type, type, owner_name, oil_price, salary, maintenance_fee, 
+    select id, date, car_id, car_type, type, owner_name, oil_price, ratio,salary, maintenance_fee,
     meal_fee, accessory_fee, penalty, reward
     from re_waji_config
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, date, car_id, car_type, type, owner_name, oil_price, salary, maintenance_fee, 
+    select id, date, car_id, car_type, type, owner_name, ratio, oil_price, salary, maintenance_fee,
     meal_fee, accessory_fee, penalty, reward
     from re_waji_config
   </select>
   <select id="selectByDate" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, date, car_id, car_type, type, owner_name, oil_price, salary, maintenance_fee,
+    select id, date, car_id, car_type, type, owner_name, ratio,oil_price, salary, maintenance_fee,
       meal_fee, accessory_fee, penalty, reward
     from re_waji_config
     where date = #{date,jdbcType=VARCHAR}
   </select>
+  <delete id="deleteByDate" parameterType="java.lang.String">
+    delete from re_waji_config
+    where date = #{date,jdbcType=VARCHAR}
+  </delete>
 </mapper>

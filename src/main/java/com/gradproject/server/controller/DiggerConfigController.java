@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -26,9 +28,17 @@ public class DiggerConfigController {
         return aa;
     }
     @PostMapping("/editDiggerConfig")
-    public SelfResponse queryConditional(@RequestBody ReWajiConfig diggerConfig){
-        log.info("DiggerConfig实体类为：【{}】",diggerConfig);
-        SelfResponse aa=diggerConfigService.editDiggerConfig(diggerConfig);
+    public SelfResponse editDiggerConfig(@RequestBody List<ReWajiConfig> diggerConfigLsit){
+        log.info("DiggerConfig实体类为：【{}】",diggerConfigLsit);
+        SelfResponse aa=diggerConfigService.editDiggerConfig(diggerConfigLsit);
+        log.info("最终返回结果为：【{}】",aa.getData());
+        return aa;
+    }
+
+    @PostMapping("/delDiggerConfigById/{id}")
+    public SelfResponse delDiggerConfigById(@PathVariable("id") Integer id){
+        log.info("DiggerConfig实体类为：【{}】",id);
+        SelfResponse aa=diggerConfigService.delDiggerConfigById(id);
         log.info("最终返回结果为：【{}】",aa.getData());
         return aa;
     }

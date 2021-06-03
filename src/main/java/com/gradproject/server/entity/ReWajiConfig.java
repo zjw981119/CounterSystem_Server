@@ -15,6 +15,8 @@ public class ReWajiConfig implements Serializable {
 
     private String ownerName;
 
+    private Double ratio;
+
     private String oilPrice;
 
     private Double salary;
@@ -127,6 +129,26 @@ public class ReWajiConfig implements Serializable {
         this.penalty = penalty;
     }
 
+    @Override
+    public String toString() {
+        return "ReWajiConfig{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", carId='" + carId + '\'' +
+                ", carType='" + carType + '\'' +
+                ", type='" + type + '\'' +
+                ", ownerName='" + ownerName + '\'' +
+                ", ratio='" + ratio + '\'' +
+                ", oilPrice='" + oilPrice + '\'' +
+                ", salary=" + salary +
+                ", maintenanceFee=" + maintenanceFee +
+                ", mealFee=" + mealFee +
+                ", accessoryFee=" + accessoryFee +
+                ", penalty=" + penalty +
+                ", reward=" + reward +
+                '}';
+    }
+
     public Double getReward() {
         return reward;
     }
@@ -134,4 +156,13 @@ public class ReWajiConfig implements Serializable {
     public void setReward(Double reward) {
         this.reward = reward;
     }
+
+    public Double getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(Double ratio) {
+        this.ratio = ratio;
+    }
+
 }
