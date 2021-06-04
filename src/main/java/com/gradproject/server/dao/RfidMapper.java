@@ -27,6 +27,10 @@ public interface RfidMapper {
     @ResultMap(value ={"RfidResult"})
     List<RfidCarNum> selectRfidByAddress(@Param("address") String address);
 
+    //查询全部车号
+    @Select("select distinct car_num from gn_rfid_carnum where address = #{address} ORDER BY car_num ASC" )
+    String[] selectAllCarnum(@Param("address") String address);
+
     //动态sql语句，根据address和rfid是否为空来修改SQL
     @Select({"<script>",
     "select rfid, car_num, address from gn_rfid_carnum",
