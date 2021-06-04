@@ -85,4 +85,17 @@ public class DiggerProductionService {
             return selfResponse.success("数据库修改成功");
         }
     }
+
+    public SelfResponse delDiggerConfigById(Integer id) {
+        SelfResponse selfResponse=new SelfResponse();
+        try{
+            int i=reWajiMapper.deleteByPrimaryKey(id);
+            log.info("数据删除结果为：【{}】",i);
+            return selfResponse.success();
+        }catch (Exception e){
+            log.error("数据删除异常，异常信息为：【{}】",e.getMessage(),e);
+        }
+        return selfResponse.failure("数据删除异常");
+    }
+
 }

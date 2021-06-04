@@ -37,6 +37,13 @@ public class DiggerProductionController {
         log.info("最终返回结果为：【{}】",aa.getData());
         return aa;
     }
+    @PostMapping("/deleteDiggerProduction/{id}")
+    public SelfResponse deleteDiggerProduction(@PathVariable("id") Integer id){
+        log.info("DiggerConfig实体类为：【{}】",id);
+        SelfResponse aa=diggerProductionService.delDiggerConfigById(id);
+        log.info("最终返回结果为：【{}】",aa.getData());
+        return aa;
+    }
 //    @PostMapping("/editDiggerProduction")
 //    public SelfResponse editDiggerProduction(@RequestBody ReWaji reWaji){
 //        log.info("查询条件为：【{}】，【{}】",reWaji);
