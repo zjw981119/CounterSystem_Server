@@ -39,51 +39,19 @@ public class DiggerProductionService {
 
     public SelfResponse editDiggerProduction(List<ReWaji> diggerList) {
         SelfResponse selfResponse=new SelfResponse();
-        List<ReWajiConfig> reWajiList=reWajiMapper.selectByDate(diggerList.get(0).getDate());
-        //logger.info("获取数据库中记录的长度为【{}】",DBlist.size());
-        //判断车辆配置表中是否有该日记录,若存在记录，则删除再插入，若不存在记录，则直接追加配置信息。
-        if(reWajiList.size()==0){
-            //遍历列表，追加配置信息
-            for(int i=0;i<diggerList.size();i++){
-                ReWaji reWaji = diggerList.get(i);
-                try{
-                    int insertResult=reWajiMapper.insert(reWaji);
-                    if (insertResult <= 0) {
-                        log.info("配置信息修改失败");
-                        return selfResponse.failure("数据库插入失败");
-                    }
-                }catch (Exception e){
-                    return selfResponse.failure("数据库修改错误");
-                }
-            }
-            return selfResponse.success("数据库修改成功");
-        }
-        else{
-            //删除当日配置信息
+        for(int i=0;i<diggerList.size();i++){
+            ReWaji reWaji = diggerList.get(i);
             try{
-                int deleteResult= reWajiMapper.deleteByDate(diggerList.get(0).getDate());
-                if(deleteResult<=0){
-                    log.info("删除配置信息修改失败");
-                    return selfResponse.failure("数据库删除异常");
+                int updateResult=reWajiMapper.updateByPrimaryKey(reWaji);
+                if (updateResult <= 0) {
+                    log.info("配置信息修改失败");
+                    return selfResponse.failure("数据库更新失败");
                 }
             }catch (Exception e){
-                return selfResponse.failure("数据库删除出错");
+                return selfResponse.failure("数据库更新错误");
             }
-            //遍历列表，追加配置信息
-            try{
-                for(int i=0;i<diggerList.size();i++){
-                    ReWaji reWaji = diggerList.get(i);
-                    int insertResult = reWajiMapper.insert(reWaji);
-                    if (insertResult <= 0) {
-                        log.info("配置信息修改失败");
-                        return selfResponse.failure("数据库插入异常");
-                    }
-                }
-            }catch (Exception e){
-                return selfResponse.failure("数据库插入错误");
-            }
-            return selfResponse.success("数据库修改成功");
         }
+            return selfResponse.success("数据库更新成功");
     }
 
     public SelfResponse delDiggerConfigById(Integer id) {
@@ -98,4 +66,20 @@ public class DiggerProductionService {
         return selfResponse.failure("数据删除异常");
     }
 
+    public SelfResponse addDiggerProduction(List<ReWaji> diggerList) {
+        SelfResponse selfResponse=new SelfResponse();
+        for(int i=0;i<diggerList.size();i++){
+            ReWaji reWaji = diggerList.get(i);
+            try{
+                int insertResult=reWajiMapper.insert(reWaji);
+                if (insertResult <= 0) {
+                    log.info("挖机生产情况插入成功");
+                    return selfResponse.failure("挖机生产情况插入失败");
+                }
+            }catch (Exception e){
+                return selfResponse.failure("挖机生产情况插入错误");
+            }
+        }
+        return selfResponse.success("数据库修改成功");
+    }
 }
