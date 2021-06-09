@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gradproject.server.dao.ReWajiMapper">
+  <resultMap id="BaseResultMap" type="com.gradproject.server.entity.ReWaji">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="car_id" jdbcType="VARCHAR" property="carId" />
+    <result column="car_type" jdbcType="VARCHAR" property="carType" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="oilcar_num" jdbcType="VARCHAR" property="oilcarNum" />
+    <result column="oil_L" jdbcType="VARCHAR" property="oilL" />
+    <result column="oil_time" jdbcType="VARCHAR" property="oilTime" />
+    <result column="oil_price" jdbcType="VARCHAR" property="oilPrice" />
+    <result column="num" jdbcType="VARCHAR" property="num" />
+    <result column="beilv" jdbcType="VARCHAR" property="beilv" />
+    <result column="wuliao" jdbcType="VARCHAR" property="wuliao" />
+    <result column="wajidanjia" jdbcType="VARCHAR" property="wajidanjia" />
+    <result column="shijianxuanze" jdbcType="VARCHAR" property="shijianxuanze" />
+    <result column="jishishijian" jdbcType="VARCHAR" property="jishishijian" />
+    <result column="jishidanjia" jdbcType="VARCHAR" property="jishidanjia" />
+    <result column="zhuangmeiche" jdbcType="VARCHAR" property="zhuangmeiche" />
+    <result column="zhuangmeidanjia" jdbcType="VARCHAR" property="zhuangmeidanjia" />
+    <result column="yun" jdbcType="VARCHAR" property="yun" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from re_waji
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gradproject.server.entity.ReWaji">
+    insert into re_waji (id, date, car_id, 
+      car_type, type, owner_name, 
+      oilcar_num, oil_L, oil_time, 
+      oil_price, num, beilv, 
+      wuliao, wajidanjia, shijianxuanze, 
+      jishishijian, jishidanjia, zhuangmeiche, 
+      zhuangmeidanjia, yun)
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=VARCHAR}, #{carId,jdbcType=VARCHAR}, 
+      #{carType,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR}, 
+      #{oilcarNum,jdbcType=VARCHAR}, #{oilL,jdbcType=VARCHAR}, #{oilTime,jdbcType=VARCHAR}, 
+      #{oilPrice,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR}, #{beilv,jdbcType=VARCHAR}, 
+      #{wuliao,jdbcType=VARCHAR}, #{wajidanjia,jdbcType=VARCHAR}, #{shijianxuanze,jdbcType=VARCHAR}, 
+      #{jishishijian,jdbcType=VARCHAR}, #{jishidanjia,jdbcType=VARCHAR}, #{zhuangmeiche,jdbcType=VARCHAR}, 
+      #{zhuangmeidanjia,jdbcType=VARCHAR}, #{yun,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gradproject.server.entity.ReWaji">
+    update re_waji
+    set date = #{date,jdbcType=VARCHAR},
+      car_id = #{carId,jdbcType=VARCHAR},
+      car_type = #{carType,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      oilcar_num = #{oilcarNum,jdbcType=VARCHAR},
+      oil_L = #{oilL,jdbcType=VARCHAR},
+      oil_time = #{oilTime,jdbcType=VARCHAR},
+      oil_price = #{oilPrice,jdbcType=VARCHAR},
+      num = #{num,jdbcType=VARCHAR},
+      beilv = #{beilv,jdbcType=VARCHAR},
+      wuliao = #{wuliao,jdbcType=VARCHAR},
+      wajidanjia = #{wajidanjia,jdbcType=VARCHAR},
+      shijianxuanze = #{shijianxuanze,jdbcType=VARCHAR},
+      jishishijian = #{jishishijian,jdbcType=VARCHAR},
+      jishidanjia = #{jishidanjia,jdbcType=VARCHAR},
+      zhuangmeiche = #{zhuangmeiche,jdbcType=VARCHAR},
+      zhuangmeidanjia = #{zhuangmeidanjia,jdbcType=VARCHAR},
+      yun = #{yun,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oilcar_num, oil_L, oil_time, 
+    oil_price, num, beilv, wuliao, wajidanjia, shijianxuanze, jishishijian, jishidanjia, 
+    zhuangmeiche, zhuangmeidanjia, yun
+    from re_waji
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oilcar_num, oil_L, oil_time, 
+    oil_price, num, beilv, wuliao, wajidanjia, shijianxuanze, jishishijian, jishidanjia, 
+    zhuangmeiche, zhuangmeidanjia, yun
+    from re_waji
+  </select>
+
+  <select id="selectByDateAndDiggerNo" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oilcar_num, oil_L, oil_time,
+      oil_price, num, beilv, wuliao, wajidanjia, shijianxuanze, jishishijian, jishidanjia,
+      zhuangmeiche, zhuangmeidanjia, yun
+    from re_waji
+    <where>
+     <if test="date != null">
+      and date = #{date,jdbcType=VARCHAR}
+    </if>
+    <if test='diggerNo != null and diggerNo != ""'>
+      and car_id = #{diggerNo,jdbcType=VARCHAR}
+    </if>
+
+    </where>
+  </select>
+  <select id="selectByDate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, date, car_id, car_type, type, owner_name, oilcar_num, oil_L, oil_time,
+      oil_price, num, beilv, wuliao, wajidanjia, shijianxuanze, jishishijian, jishidanjia,
+      zhuangmeiche, zhuangmeidanjia, yun
+    from re_waji
+    where date = #{date,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByDate" parameterType="java.lang.String">
+    delete from re_waji
+    where date = #{date,jdbcType=VARCHAR}
+  </delete>
+</mapper>

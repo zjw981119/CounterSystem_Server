@@ -11,7 +11,7 @@ public interface SelfCounterMapper {
 
     //查询在某一时间段内所有记录的不重复车号
     @Select("select distinct car_no from gn_self_counter where time between #{beginTime} and #{endTime} ORDER BY car_no ASC" )
-    String[] getcarnumSetlection(@Param("beginTime") String beginTime, @Param("endTime") String endTime);
+    String[] getCarnumSelection(@Param("beginTime") String beginTime, @Param("endTime") String endTime);
 
     //查询某一时间段内所有记录的不重复刷卡器地址
     @Select("select distinct address from gn_self_counter where time between #{beginTime} and #{endTime} ORDER BY address ASC" )

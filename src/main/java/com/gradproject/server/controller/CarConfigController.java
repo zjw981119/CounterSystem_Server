@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.gradproject.server.entity.CarConfig;
 import com.gradproject.server.entity.model.SelfResponse;
 import com.gradproject.server.service.CarConfigService;
+import com.gradproject.server.service.RfidCarConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class CarConfigController {
 
     @Autowired
     private CarConfigService configService;
+
+    @Autowired
+    private RfidCarConfigService rfidService;
 
     //提交修改信息
     @PostMapping("/setConfig")
@@ -53,6 +57,21 @@ public class CarConfigController {
             logger.error("数据查询异常，异常信息为：【{}】", e.getMessage(), e);
         }
         return response.failure("数据查询异常");
+    }
+
+    //获取全部车号
+    @GetMapping("/getCarNum")
+    public SelfResponse getCarnumSelection(@RequestParam(required = true,value="address") String address){
+        SelfResponse response = new SelfResponse();
+        try {
+            logger.info("获取矿区：【{}】的车号信息。", address);
+            String[] cache = rfidService.getCarnumList(address);
+            //logger.info("响应为：【{}】。", response.success(cache,total));
+            return response.success(cache);
+        } catch (Exception e){
+            logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
+        }
+        return response.failure("数据读取异常");
     }
 
     //删除配置信息

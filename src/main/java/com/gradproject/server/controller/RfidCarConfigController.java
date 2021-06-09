@@ -52,7 +52,7 @@ public class RfidCarConfigController {
             response = configService.removeConfigData(rfid);
             return response;
         } catch (Exception e){
-            logger.error("数据读取异常，异常信息为：【{}】", e.getMessage(), e);
+            logger.error("数据删除异常，异常信息为：【{}】", e.getMessage(), e);
         }
         return response.failure("数据删除异常");
     }

@@ -196,7 +196,7 @@ public class SelfCounterService {
     public CarRecordSelection getSelection(String beginTime, String endTime){
         CarRecordSelection selectionList=new CarRecordSelection();
         //设置车号选择器属性值
-        selectionList.setCarnumSelection(Smapper.getcarnumSetlection(beginTime, endTime));
+        selectionList.setCarnumSelection(Smapper.getCarnumSelection(beginTime, endTime));
         //设置刷卡器选择器属性值
         selectionList.setAddressSelection(Smapper.getaddressSetlection(beginTime, endTime));
         //设置挖机选择器属性值
