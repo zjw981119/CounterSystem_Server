@@ -45,7 +45,7 @@ public class CarConfigService {
             for(int i=0;i<CarConfigList.size();i++){
                 CarConfig config = CarConfigList.get(i);
                 //设置更新日期属性值
-                config.setUpdateTime(updateTime);
+                config.setDate(updateTime);
                 logger.info("获取的对象为：【{}】",config);
                 insertResult=mapper.insertCarConfigData(config);
                 if (insertResult <= 0) {
@@ -66,7 +66,7 @@ public class CarConfigService {
             for(int i=0;i<CarConfigList.size();i++){
                 CarConfig config = CarConfigList.get(i);
                 //设置更新日期属性值
-                config.setUpdateTime(updateTime);
+                config.setDate(updateTime);
                 logger.info("获取的对象为：【{}】",config);
                 insertResult=mapper.insertCarConfigData(config);
                 if (insertResult <= 0) {

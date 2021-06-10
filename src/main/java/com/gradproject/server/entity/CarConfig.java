@@ -7,35 +7,37 @@ public class CarConfig {
 
     private Integer id;
 
-    private String carNum;
+    private String date;
+
+    private String carId;
 
     private String carType;
+    //内外部
+    private String type;
 
-    private String place;
-
-    private String grabCar;
+    private String bindExcavator;
 
     private String ownerName;
 
-    private String initPrice;
+    private String oilPrice;
 
     //方量
-    private String volume;
+    private String multiple;
 
     //标箱量
-    private String teu;
+    private String biaoxiang;
 
-    private String salary;
+    private Double salary;
+    //维修费
+    private Double maintenanceFee;
 
-    private String repairCost;
+    private Double mealFee;
+    //配件费
+    private Double accessoryFee;
 
-    private String foodCost;
+    private Double penalty;
 
-    private String fittingsCost;
+    private Double reward;
 
-    private String fine;
 
-    private String bonus;
-
-    private String updateTime;
 }

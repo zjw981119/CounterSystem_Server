@@ -117,37 +117,12 @@ public class SelfCounterService {
 
 
 
-            /*
-            空满载默认值 空载
-            if (counter.getCarLoad() == null) {
-                counter.setCarLoad("空载");
-            }
-            */
-
             //向self_counter数据表中插入数据
             logger.info("插入self_counter数据库中的数据为：【{}】", JSON.toJSONString(counter));
             int Sresult = Smapper.insertCounterData(counter);
             if (Sresult > 0) {
                 logger.info("数据插入self_counter表成功！插入的id为：【{}】", counter.getId());
             }
-
-            /*
-            //向cumulation_counter数据表中插入数据
-            logger.info("插入cumulation_counter数据库中的数据为：【{}】", JSON.toJSONString(Cucounter));
-            List<CumulationCounter> CuCounterList=Cmapper.selectCumulateDataByNumAndDay(carNum,workDay);
-            //若为空，则插入数据，否则更新数据
-            int Cresult;
-            if(CuCounterList.isEmpty())
-            {
-                Cresult=Cmapper.insertCumulateData(Cucounter);
-            }
-            else{
-                Cresult=Cmapper.updateCumulateData(Cucounter);
-            }
-            if(Cresult>0){
-                logger.info("数据插入cumulation_counter表成功！");
-            }
-            */
 
 
             return response.success();
