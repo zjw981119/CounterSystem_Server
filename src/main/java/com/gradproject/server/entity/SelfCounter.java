@@ -31,15 +31,15 @@ public class SelfCounter {
     private String isFull;
 
     //物料
-    private String material;
+    private String wuliaoType;
 
     //运距
-    private String distance;
+    private String transportDistance;
 
     //单价
-    private String price;
+    private String unitPrice;
 
     //特殊情况加车数
-    private String additionalCount;
+    private String addcarParticular;
 
 }

@@ -152,8 +152,8 @@ public class SelfCounterService {
         for(int i=0;i<counterList.size();i++){
             SelfCounter counter = counterList.get(i);
             //logger.info("获取的对象为：【{}】",counter);
-            result=Smapper.updateDataById(counter.getIsFull(),counter.getMaterial(),counter.getDistance(),
-                    counter.getPrice(),counter.getAdditionalCount(),counter.getId());
+            result=Smapper.updateDataById(counter.getIsFull(),counter.getWuliaoType(),counter.getTransportDistance(),
+                    counter.getUnitPrice(),counter.getAddcarParticular(),counter.getId());
             if (result <= 0) {
                 logger.info("车载情况修改失败");
                 return response.failure("数据库修改异常");

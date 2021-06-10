@@ -37,12 +37,11 @@ public interface SelfCounterMapper {
             @Result(property="rfid", column="card_no"),
             @Result(property="time", column="time"),
             @Result(property="degree", column="degree"),
-            @Result(property="material", column="material"),
-            @Result(property="distance", column="distance"),
-            @Result(property="price", column="price"),
+            @Result(property="wuliaoType", column="wuliao_type"),
+            @Result(property="transportDistance", column="transport_distance"),
+            @Result(property="unitPrice", column="unitprice"),
             @Result(property="isFull", column="is_full"),
-            @Result(property="additionalCount", column="additional_count"),
-            @Result(property="remark", column="remark"),
+            @Result(property="addcarParticular", column="addcar_particular"),
             @Result(property="picture", column="picture")
     })
     @Select({"<script>",
@@ -79,15 +78,12 @@ public interface SelfCounterMapper {
     @Select("select picture from gn_self_counter where id = #{id}")
     String selectPicById(@Param("id") Integer id);
 
-    //修改车载情况
-    @Update("update gn_self_counter set car_load = #{carLoad} where id = #{id}")
-    int updateCarloadDataById(@Param("carLoad") String carLoad,@Param("id") Integer id);
 
     //修改数据(车载、物料、运距、价格、加车数)
-    @Update("update gn_self_counter set is_full = #{isFull}, material = #{materail}, " +
-    "distance = #{distance}, price = #{price}, additional_count = #{additionalCount} " +
+    @Update("update gn_self_counter set is_full = #{isFull}, wuliao_type = #{wuliao}, " +
+    "transport_distance = #{distance}, unitprice = #{unitprice}, addcar_particular = #{addcarParticular} " +
     "where id = #{id}")
-    int updateDataById(@Param("isFull") String isFull,@Param("materail") String materail,
-                       @Param("distance") String distance,@Param("price") String price,
-                       @Param("additionalCount") String additionalCount,@Param("id") Integer id);
+    int updateDataById(@Param("isFull") String isFull,@Param("wuliao") String wuliao,
+                       @Param("distance") String distance,@Param("unitprice") String unitprice,
+                       @Param("addcarParticular") String addcarParticular,@Param("id") Integer id);
 }
