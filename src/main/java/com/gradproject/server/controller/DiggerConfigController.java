@@ -42,4 +42,11 @@ public class DiggerConfigController {
         log.info("最终返回结果为：【{}】",aa.getData());
         return aa;
     }
+
+    @PostMapping("/latestDiggerConfigData")
+    public SelfResponse latestDiggerConfigData(){
+        SelfResponse aa=diggerConfigService.latestDiggerConfigData();
+        log.info("最终返回结果为：【{}】",aa.getData());
+        return aa;
+    }
 }

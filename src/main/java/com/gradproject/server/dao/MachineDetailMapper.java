@@ -30,18 +30,19 @@ public interface MachineDetailMapper {
     })
     @Select("<script>"
             +"SELECT"
-            +" re_self_counter.id,re_car_config.car_type,re_self_counter.car_no,count(*) as trip_num,re_self_counter.unitprice,"
-            +"re_self_counter.transport_distance,re_car_config.multiple,re_car_config.salary,re_car_config.maintenance_fee,"
+            +" gn_self_counter.id,re_car_config.car_type,gn_self_counter.car_no,count(*) as trip_num,gn_self_counter.unitprice,"
+            +"gn_self_counter.transport_distance,re_car_config.multiple,re_car_config.salary,re_car_config.maintenance_fee,"
             +"re_car_config.meal_fee,re_car_config.accessory_fee,re_car_config.penalty,re_car_config.reward,"
             +"re_car_config.biaoxiang,sum(re_car_production.oil_L) as sum_oil_L"
-            +" FROM re_self_counter,re_car_config,re_car_production "//****注意空格****
+            +" FROM gn_self_counter,re_car_config,re_car_production "//****注意空格****
             +"<where>"
-            +"<if test=\"beginTime !=null and beginTime !=''\">re_self_counter.time &gt;= #{beginTime} </if>"
-            +"<if test=\"endTime !=null and endTime !=''\">and re_self_counter.time &lt;= #{endTime} </if>"
-            +"<if test=\"trackNo !=null and trackNo !=''\">and re_self_counter.car_no = #{trackNo} </if>"
-            +"and re_self_counter.car_no = re_car_config.car_id and re_car_config.car_id = re_car_production.car_id"
+            +"<if test=\"beginTime !=null and beginTime !=''\">gn_self_counter.time &gt;= #{beginTime} </if>"
+            +"<if test=\"endTime !=null and endTime !=''\">and gn_self_counter.time &lt;= #{endTime} </if>"
+            +"<if test=\"trackNo !=null and trackNo !=''\">and gn_self_counter.car_no = #{trackNo} </if>"
+            +"and gn_self_counter.car_no = re_car_config.car_id and re_car_config.car_id = re_car_production.car_id"
+            +" and gn_self_counter.address = 'PANH@001'"
             +"</where>"
-            +"GROUP BY re_self_counter.car_no,re_self_counter.unitprice"
+            +"GROUP BY gn_self_counter.car_no,gn_self_counter.unitprice"
             +"</script>")
     List<MachineDetail> selectMachineDetail_BIgCar(@Param("beginTime") String beginTime,@Param("endTime") String endTime,@Param("trackNo") String s);
     @Select("<script>"

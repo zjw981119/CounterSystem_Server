@@ -6,10 +6,12 @@ import com.gradproject.server.entity.CarConfig;
 import com.gradproject.server.entity.DiggerConfig;
 import com.gradproject.server.entity.ReWajiConfig;
 import com.gradproject.server.entity.model.SelfResponse;
+import com.gradproject.server.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -92,5 +94,29 @@ public class DiggerConfigService {
             log.error("数据删除异常，异常信息为：【{}】",e.getMessage(),e);
         }
         return selfResponse.failure("数据删除异常");
+    }
+
+    public SelfResponse latestDiggerConfigData() {
+        SelfResponse selfResponse=new SelfResponse();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, +1);
+        log.info("初始查询时间为【{}】",calendar.getTime());
+        int circleTimes=30;
+        try{
+            while(circleTimes>0){
+                calendar.add(Calendar.DATE, -1);
+                String formatShortStr = DateUtils.getFormatDate(calendar.getTime(),"yyyy-MM-dd");
+                log.info("查询时间为【{}】",formatShortStr);
+                List<ReWajiConfig> list=reWajiConfigMapper.selectByDate(formatShortStr);
+                if(list.size()!=0){
+                    return selfResponse.success(list);
+                }
+                circleTimes--;
+            }
+            return selfResponse.failure("配置信息查询失败，请先配置挖机信息");
+        }catch (Exception e){
+            log.error("查询出错：【{}】",e.getMessage());
+            return selfResponse.failure("配置信息查询失败，请刷新重试");
+        }
     }
 }

@@ -44,11 +44,11 @@ public class DiggerProductionController {
         log.info("最终返回结果为：【{}】",aa.getData());
         return aa;
     }
-//    @PostMapping("/editDiggerProduction")
-//    public SelfResponse editDiggerProduction(@RequestBody ReWaji reWaji){
-//        log.info("查询条件为：【{}】，【{}】",reWaji);
-//        SelfResponse aa=diggerProductionService.editDiggerProduction(reWaji);
-//        log.info("最终返回结果为：【{}】",aa.getData());
-//        return aa;
-//    }
+    @PostMapping("/addDiggerProduction")
+    public SelfResponse addDiggerProduction(@RequestBody List<ReWaji> diggerList){
+        log.info("插入数据为：【{}】，【{}】",diggerList);
+        SelfResponse aa=diggerProductionService.addDiggerProduction(diggerList);
+        log.info("最终返回结果为：【{}】",aa.getData());
+        return aa;
+    }
 }
