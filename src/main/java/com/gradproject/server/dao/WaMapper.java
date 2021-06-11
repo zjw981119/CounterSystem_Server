@@ -73,16 +73,16 @@ public interface WaMapper {
             +"SELECT "
             +"car_type,car_id,bind_excavator,COUNT(car_id) as tripNum,oil_price, "
             +"multiple,(COUNT(car_id) * oil_price * multiple) as zhuang,(COUNT(car_id) * multiple) as biao,  "
-            +"(COUNT(car_id) * multiple * COUNT(car_id) * multiple) as fang, (COUNT(car_id) * oil_price) as mei, ((COUNT(car_id) * oil_price * multiple) + (COUNT(car_id) * oil_price)) as mao,sum(oil_L) as oil_L, "
-            +" (sum(oil_L) * oil_price) as ran "
-            +"FROM re_car_production "
+            +"(COUNT(car_id) * multiple * COUNT(car_id) * multiple) as fang, (COUNT(car_id) * oil_price) as mei, ((COUNT(car_id) * oil_price * multiple) + (COUNT(car_id) * oil_price)) as mao "
+
+            +"FROM re_car_config "
             +"<where>"
             +"<if test=\"value1 !=null and value1 !=''\"> and date <![CDATA[ >= ]]> #{value1}</if>"
             +"<if test=\"value2 !=null and value2 !=''\"> and date <![CDATA[ <= ]]> #{value2}</if> "
 
             +"and type = '外部' "
             +"</where>"
-            +"GROUP BY car_id,bind_excavator,oil_L  "
+            +"GROUP BY car_id,bind_excavator  "
 
             +"</script>"})
     List<Waing> selectW(@Param("value1") String value1, @Param("value2") String value2);
