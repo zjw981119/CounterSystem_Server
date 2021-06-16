@@ -35,7 +35,7 @@ public interface WaMapper {
             +"beilv,((count(car_id)) * oil_price * beilv) as zhuang, ((count(car_id)) * beilv) as biao, "
             +" (((count(car_id)) * beilv) * ((count(car_id)) * oil_price * beilv)) as fang, sum(jishishijian*jishidanjia) as jishi,((count(car_id)) * oil_price) as mei,(sum(jishishijian*jishidanjia) + ((count(car_id)) * oil_price) + ((count(car_id)) * oil_price * beilv)) as mao, "
             +" sum(oil_L) as oil_L,(oil_price * sum(oil_L)) as ran "
-            +"FROM re_waji "
+            +"FROM re_waji_config "
             +"<where>"
             +"<if test=\"value1 !=null and value1 !=''\"> and date <![CDATA[ >= ]]> #{value1}</if>"
             +"<if test=\"value2 !=null and value2 !=''\"> and date <![CDATA[ <= ]]> #{value2}</if> "

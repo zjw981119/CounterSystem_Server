@@ -41,8 +41,14 @@ public class WaService {
             float g = 0;
             float h = 0;
             i += Integer.parseInt(wing.getTripNum());
-            a += Float.parseFloat(wing.getBiao());
-            b += Float.parseFloat(wing.getJishi());
+            if (null != wing.getBiao()) {
+                a += Float.parseFloat(wing.getBiao());
+            }
+            if (null != wing.getJishi()) {
+                b += Float.parseFloat(wing.getJishi());
+            }
+
+
             if (null != wing.getMao()) {
                 c += Float.parseFloat(wing.getMao());
             }
