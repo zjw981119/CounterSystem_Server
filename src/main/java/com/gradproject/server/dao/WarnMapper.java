@@ -42,8 +42,7 @@ public interface WarnMapper {
             +"<if test=\"value2 !=null and value2 !=''\"> and date_format(time,'%Y-%m-%d') <![CDATA[ <= ]]> #{value2}</if> "
             +"and gn_self_counter.car_no = re_car_config.car_id "
             +"and gn_self_counter.address = 'PANH@001' "
-            +"<if test=\"value1 !=null and value1 !=''\"> and re_car_config.date <![CDATA[ >= ]]> #{value1}</if>"
-            +"<if test=\"value2 !=null and value2 !=''\"> and re_car_config.date <![CDATA[ <= ]]> #{value2}</if> "
+            +"and date_format(time,'%Y-%m-%d') = date  "
 
             +"and re_car_config.type = '内部' "
             +"and gn_self_counter.transport_distance is not null "
@@ -74,8 +73,7 @@ public interface WarnMapper {
             +"and gn_self_counter.car_no = re_car_config.car_id "
             +"and gn_self_counter.address = 'PANH@001' "
 
-            +"<if test=\"value1 !=null and value1 !=''\"> and re_car_config.date <![CDATA[ >= ]]> #{value1}</if>"
-            +"<if test=\"value2 !=null and value2 !=''\"> and re_car_config.date <![CDATA[ <= ]]> #{value2}</if> "
+            +"and date_format(time,'%Y-%m-%d') = date  "
             +"and re_car_config.type = '内部' "
             +"and gn_self_counter.transport_distance is not null "
             +"</where>"
