@@ -3,6 +3,7 @@ package com.gradproject.server.dao;
 import com.gradproject.server.entity.Waing;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -37,8 +38,8 @@ public interface WaMapper {
             +" sum(oil_L) as oil_L,(oil_price * sum(oil_L)) as ran "
             +"FROM re_waji_config "
             +"<where>"
-            +"<if test=\"value1 !=null and value1 !=''\"> and date <![CDATA[ >= ]]> #{value1}</if>"
-            +"<if test=\"value2 !=null and value2 !=''\"> and date <![CDATA[ <= ]]> #{value2}</if> "
+            +"<if test=\"value1 !=null and value1 !=''\"> and date <![CDATA[ >= ]]> DATE_FORMAT(#{value1},'%Y-%m-%d')</if>"
+            +"<if test=\"value2 !=null and value2 !=''\"> and date <![CDATA[ <= ]]> DATE_FORMAT(#{value2},'%Y-%m-%d')</if> "
 
             +"and type = '外部' "
             +"</where>"
@@ -71,18 +72,23 @@ public interface WaMapper {
     })
     @Select({"<script>"
             +"SELECT "
-            +"car_type,car_id,bind_excavator,COUNT(car_id) as tripNum,oil_price, "
-            +"multiple,(COUNT(car_id) * oil_price * multiple) as zhuang,(COUNT(car_id) * multiple) as biao,  "
-            +"(COUNT(car_id) * multiple * COUNT(car_id) * multiple) as fang, (COUNT(car_id) * oil_price) as mei, ((COUNT(car_id) * oil_price * multiple) + (COUNT(car_id) * oil_price)) as mao "
+            +"re_car_config.car_type, re_car_config.car_id,(count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular))  as tripNum,re_car_config.oil_price, "
+            +"gn_self_counter.transport_distance,re_car_config.multiple,((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) *  re_car_config.oil_price  * re_car_config.multiple) as zhuang,((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) *  re_car_config.multiple) as biao, "
+            +"FORMAT((((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) *  re_car_config.multiple) * ((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) *  re_car_config.multiple)),2) as fang ,re_car_config.jishi,((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) * re_car_config.oil_price) as mei,(((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) * re_car_config.oil_price) + jishi + ((count(gn_self_counter.transport_distance)+SUM(gn_self_counter.addcar_particular)) *  re_car_config.oil_price  * re_car_config.multiple)) as mao, "
+            +"sum(re_car_config.oil_L) as oil_L,(re_car_config.oil_price * sum(re_car_config.oil_L)) as ran,re_car_config.bind_excavator  "
 
-            +"FROM re_car_config "
+            +"FROM gn_self_counter,re_car_config "
             +"<where>"
-            +"<if test=\"value1 !=null and value1 !=''\"> and date <![CDATA[ >= ]]> #{value1}</if>"
-            +"<if test=\"value2 !=null and value2 !=''\"> and date <![CDATA[ <= ]]> #{value2}</if> "
+            +"<if test=\"value1 !=null and value1 !=''\"> and time <![CDATA[ >= ]]> #{value1}</if>"
+            +"<if test=\"value2 !=null and value2 !=''\"> and time <![CDATA[ <= ]]> #{value2}</if> "
+            +"and gn_self_counter.car_no = re_car_config.car_id "
+            +"and gn_self_counter.address = 'PANH@001' "
+            +"and date_format(time,'%Y-%m-%d') = date  "
 
-            +"and type = '外部' "
+            +"and re_car_config.type = '外部' "
+            +"and gn_self_counter.transport_distance is not null "
             +"</where>"
-            +"GROUP BY car_id,bind_excavator  "
+            +"GROUP BY gn_self_counter.transport_distance,re_car_config.car_id ,re_car_config.bind_excavator  "
 
             +"</script>"})
     List<Waing> selectW(@Param("value1") String value1, @Param("value2") String value2);

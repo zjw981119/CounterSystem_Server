@@ -21,10 +21,19 @@ public class WarnService {
                                 String value2
                                 ){
 
-
+        Date startTime;
+        Date endTime;
         List<Warning> warnings;
         SelfResponse response = new SelfResponse();
-        warnings = warnMapper.selectWarn(value1, value2);
+//        try {
+//            startTime = DateUtils.getDate(value1, "yyyy-MM-dd HH:mm:ss");
+//            endTime = DateUtils.getDate(value2, "yyyy-MM-dd HH:mm:ss");
+//            log.info("转化后的数据startTime:{},endTime:{}", startTime, endTime);
+//        } catch (Exception e) {
+//            log.info("时间数据格式化错误：{},{}", e.getMessage(), e);
+//            return response.error("格式转化错误");
+//        }
+        warnings = warnMapper.selectWarn(value1,value2);
         return response.success(warnings);
 
 

@@ -1,13 +1,16 @@
 package com.gradproject.server.service;
 
+import com.alibaba.druid.stat.JdbcConnectionStat;
 import com.gradproject.server.dao.WaMapper;
 import com.gradproject.server.entity.Waing;
 import com.gradproject.server.entity.model.SelfResponse;
+import com.gradproject.server.utils.DateUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Float.parseFloat;
@@ -23,15 +26,26 @@ public class WaService {
                                 String value2
                                 ){
 
+        Date startTime;
+        Date endTime;
 
         List<Waing> waings =new ArrayList<>();
+
+        SelfResponse response = new SelfResponse();
+//        try {
+//            startTime = DateUtils.getDate(value1, "yyyy-MM-dd HH:mm:ss");
+//            endTime = DateUtils.getDate(value2, "yyyy-MM-dd HH:mm:ss");
+//            log.info("转化后的数据startTime:{},endTime:{}", startTime, endTime);
+//        } catch (Exception e) {
+//            log.info("时间数据格式化错误：{},{}", e.getMessage(), e);
+//            return response.error("格式转化错误");
+//        }
         List<Waing> wings = waMapper.selectWa(value1, value2);
         List<Waing> aings = waMapper.selectW(value1, value2);
-        SelfResponse response = new SelfResponse();
         for (Waing wing : wings) {
             waings.add(wing);
             Waing temp = new Waing();
-            int i = 0;
+            float i = 0;
             float a = 0;
             float b = 0;
             float c = 0;
@@ -40,7 +54,9 @@ public class WaService {
             float f = 0;
             float g = 0;
             float h = 0;
-            i += Integer.parseInt(wing.getTripNum());
+            if (null != wing.getTripNum()) {
+                i += Float.parseFloat(wing.getTripNum());
+            }
             if (null != wing.getBiao()) {
                 a += Float.parseFloat(wing.getBiao());
             }
@@ -70,7 +86,9 @@ public class WaService {
             for (Waing aing : aings) {
                 if (aing.getBind_excavator() .equals(wing.getCar_no()) ){
                     waings.add(aing);
-                    i += Integer.parseInt(aing.getTripNum());
+                    if( null != aing.getTripNum() ) {
+                        i +=  Float.parseFloat(aing.getTripNum());
+                    }
                     if( null != aing.getBiao() ) {
                         a +=  Float.parseFloat(aing.getBiao());
                     }
