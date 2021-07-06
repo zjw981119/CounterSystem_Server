@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -96,9 +97,11 @@ public class DiggerConfigService {
         return selfResponse.failure("数据删除异常");
     }
 
-    public SelfResponse latestDiggerConfigData() {
+    public SelfResponse latestDiggerConfigData(String date) {
         SelfResponse selfResponse=new SelfResponse();
+        Date dateOriginal=DateUtils.getDate(date,"yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateOriginal);
         calendar.add(Calendar.DATE, +1);
         log.info("初始查询时间为【{}】",calendar.getTime());
         int circleTimes=30;

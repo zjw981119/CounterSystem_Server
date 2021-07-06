@@ -44,8 +44,8 @@ public class DiggerConfigController {
     }
 
     @PostMapping("/latestDiggerConfigData")
-    public SelfResponse latestDiggerConfigData(){
-        SelfResponse aa=diggerConfigService.latestDiggerConfigData();
+    public SelfResponse latestDiggerConfigData(@RequestParam("date") String date){
+        SelfResponse aa=diggerConfigService.latestDiggerConfigData(date);
         log.info("最终返回结果为：【{}】",aa.getData());
         return aa;
     }
